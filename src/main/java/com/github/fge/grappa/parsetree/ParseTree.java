@@ -12,9 +12,6 @@ public class ParseTree<T> implements Tree<T>, Visitable{
     private List<ParseTree<T>> children = new ArrayList<>();
     private T value = null;
 
-    public ParseTree(){
-    }
-
     public ParseTree(T value){
         this.value = value;
     }
@@ -24,21 +21,26 @@ public class ParseTree<T> implements Tree<T>, Visitable{
         this.children = children;
     }
 
+    public ParseTree(ParseTree<T> tree){
+        this.value = tree.value;
+        this.children = tree.children;
+    }
+
     ////////////////// TREE INTERFACE //////////////////////////////////////////////////////////////////////////////////
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean addChild(T value) {
-        return false;
+        return children.add(new ParseTree<>(value));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Tree removeChild(T value) {
-        return null;
+    public Tree removeChild(Tree value) {
+        return children.remove(children.indexOf(value));
     }
 
     /**

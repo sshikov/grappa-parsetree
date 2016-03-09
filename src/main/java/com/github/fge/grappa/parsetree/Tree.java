@@ -18,10 +18,10 @@ public interface Tree<T> {
      * Remove the first {@code Tree} child with value provided. If the {@code Tree} has children, these children are
      * also removed and returned. If no {@code Tree} is found, then <b>null</b> is returned.
      *
-     * @param value     The value of the {@code Tree} to remove.
+     * @param child     The value of the {@code Tree} to remove.
      * @return          A {@code Tree} representing the node removed and all of it's children.
      */
-    Tree removeChild(T value);
+    Tree removeChild(Tree child);
 
     /**
      * Returns whether or not this {@code Tree} has children.
