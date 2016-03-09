@@ -8,7 +8,7 @@ import com.github.fge.grappa.run.events.MatchSuccessEvent;
 
 public final class ParseTreeListener<V> extends ParseRunnerListener<V> {
 
-    private ParseTree tree;
+    private ParseTree tree = null;
 
     @Override
     public void matchSuccess(final MatchSuccessEvent<V> event)

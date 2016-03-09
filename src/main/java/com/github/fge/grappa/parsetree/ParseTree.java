@@ -7,7 +7,7 @@ import java.util.List;
  * @author      ChrisBrenton
  * @version     09/03/2015
  */
-public class ParseTree<T> implements Tree<T>{
+public class ParseTree<T> implements Tree<T>, Visitable{
 
     private List<ParseTree<T>> children = new ArrayList<>();
     private T value = null;
@@ -24,6 +24,7 @@ public class ParseTree<T> implements Tree<T>{
         this.children = children;
     }
 
+    ////////////////// TREE INTERFACE //////////////////////////////////////////////////////////////////////////////////
     /**
      * {@inheritDoc}
      */
@@ -56,5 +57,12 @@ public class ParseTree<T> implements Tree<T>{
         return children;
     }
 
-
+    ////////////////// VISITABLE INTERFACE /////////////////////////////////////////////////////////////////////////////
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }
