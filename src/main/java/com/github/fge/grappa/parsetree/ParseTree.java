@@ -70,7 +70,7 @@ public class ParseTree<E> implements Tree<E>, Visitable{
      * {@inheritDoc}
      */
     @Override
-    public List<? extends Tree<E>> getChildren() {
+    public List<Tree<E>> getChildren() {
         return children;
     }
 
