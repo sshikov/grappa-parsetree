@@ -6,9 +6,10 @@ import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 
-public final class ParseTreeListener<V>
-    extends ParseRunnerListener<V>
-{
+public final class ParseTreeListener<V> extends ParseRunnerListener<V> {
+
+    private ParseTree tree;
+
     @Override
     public void matchSuccess(final MatchSuccessEvent<V> event)
     {
@@ -27,5 +28,7 @@ public final class ParseTreeListener<V>
         final String matched = context.getMatch();
 
         // TODO: build tree node here
+
+
     }
 }
