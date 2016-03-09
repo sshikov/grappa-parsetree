@@ -7,23 +7,32 @@ import java.util.List;
  * @author      ChrisBrenton
  * @version     09/03/2015
  */
-public class ParseTree<T> implements Tree<T>, Visitable{
+public class ParseTree<E> implements Tree<E>, Visitable{
 
-    private List<ParseTree<T>> children = new ArrayList<>();
-    private T value = null;
+    private List<Tree<E>> children = new ArrayList<>();
+    private Tree<E> parent = null;
+    private E value = null;
 
-    public ParseTree(T value){
+    /* Public Constructors */
+    public ParseTree(E value){
         this.value = value;
     }
 
-    public ParseTree(T value, List<ParseTree<T>> children){
+    public ParseTree(E value, List<Tree<E>> children){
         this.value = value;
         this.children = children;
     }
 
-    public ParseTree(ParseTree<T> tree){
+    /* Copy Constructor */
+    public ParseTree(ParseTree<E> tree){
         this.value = tree.value;
         this.children = tree.children;
+    }
+
+    /* Private Constructor */
+    private ParseTree(E value, ParseTree<E> parent){
+        this.value = value;
+        this.parent = parent;
     }
 
     ////////////////// TREE INTERFACE //////////////////////////////////////////////////////////////////////////////////
@@ -31,17 +40,23 @@ public class ParseTree<T> implements Tree<T>, Visitable{
      * {@inheritDoc}
      */
     @Override
-    public boolean addChild(T value) {
-        return children.add(new ParseTree<>(value));
+    public boolean addChild(E value) {
+        return children.add(new ParseTree<>(value, this));
     }
 
-    /**
+	/**
      * {@inheritDoc}
      */
     @Override
-    public Tree removeChild(Tree value) {
-        return children.remove(children.indexOf(value));
+    public Tree<E> getParent() {
+        return parent;
     }
+
+    @Override
+    public Tree<E> removeChild(Tree<E> child) {
+        return children.remove(children.indexOf(child));
+    }
+
 
     /**
      * {@inheritDoc}
@@ -55,7 +70,7 @@ public class ParseTree<T> implements Tree<T>, Visitable{
      * {@inheritDoc}
      */
     @Override
-    public List<? extends Tree> getChildren() {
+    public List<? extends Tree<E>> getChildren() {
         return children;
     }
 
