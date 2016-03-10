@@ -6,9 +6,24 @@ import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
 public final class ParseTreeListener<V>
     extends ParseRunnerListener<V>
 {
+    private final Map<String, Class<? extends ParseNode>> nodeMap;
+
+    private final Map<Class<?>, Constructor<?>> constructors = new HashMap<>();
+
+    public ParseTreeListener(
+        final Map<String, Class<? extends ParseNode>> nodeMap)
+    {
+        this.nodeMap = nodeMap;
+    }
+
     @Override
     public void matchSuccess(final MatchSuccessEvent<V> event)
     {
@@ -24,8 +39,37 @@ public final class ParseTreeListener<V>
         if (matcher.getType() == MatcherType.ACTION)
             return;
 
-        final String matched = context.getMatch();
+        final String label = matcher.getLabel();
 
-        // TODO: build tree node here
+        final Class<? extends ParseNode> nodeClass = nodeMap.get(label);
+
+        if (nodeClass == null)
+            return;
+
+        final Constructor<? extends ParseNode> constructor = getConstructor(
+            nodeClass);
+
+        final int start = context.getStartIndex();
+        final int end = context.getCurrentIndex();
+        final String match = context.getInputBuffer().extract(start, end);
+        final ParseNode node;
+        try {
+            node = constructor.newInstance(match);
+        } catch (InstantiationException | InvocationTargetException
+            | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(node.getValue());
+    }
+
+    private <T extends ParseNode> Constructor<T> getConstructor(
+        final Class<T> nodeClass)
+    {
+        try {
+            return nodeClass.getConstructor(String.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
