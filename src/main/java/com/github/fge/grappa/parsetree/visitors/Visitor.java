@@ -1,4 +1,6 @@
-package com.github.fge.grappa.parsetree;
+package com.github.fge.grappa.parsetree.visitors;
+
+import com.github.fge.grappa.parsetree.nodes.ParseNode;
 
 /**
  * @author      ChrisBrenton
@@ -10,5 +12,5 @@ public interface Visitor {
      * @param node      The {@code Visitable} to visit.
      * @return          The value held by the {@code Visitable} visited
      */
-     Visitable visit(Visitable node);
+     void visit(ParseNode node);
 }

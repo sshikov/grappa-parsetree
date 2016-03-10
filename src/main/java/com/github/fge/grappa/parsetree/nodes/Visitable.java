@@ -1,4 +1,6 @@
-package com.github.fge.grappa.parsetree;
+package com.github.fge.grappa.parsetree.nodes;
+
+import com.github.fge.grappa.parsetree.visitors.Visitor;
 
 /**
  * @author      ChrisBrenton
