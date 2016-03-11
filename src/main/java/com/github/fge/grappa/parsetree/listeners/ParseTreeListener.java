@@ -2,85 +2,119 @@ package com.github.fge.grappa.parsetree.listeners;
 
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
-import com.github.fge.grappa.parsetree.builders.ParseTreeBuilder;
+import com.github.fge.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.fge.grappa.parsetree.nodes.ParseNode;
+import com.github.fge.grappa.parsetree.visitors.Visitor;
 import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
+import com.github.fge.grappa.run.events.PreMatchEvent;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-public final class ParseTreeListener<V> extends ParseRunnerListener<V> {
+public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
+    private final ParseNodeConstructorRepository repository;
 
-    private final Map<String, Class<? extends ParseNode>> nodeMap;
-    private final Map<Class<?>, Constructor<?>> constructors = new HashMap<>();
+    private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
-    private ParseTreeBuilder builder = new ParseTreeBuilder();
+    private final List<Visitor> visitors = new ArrayList<>();
 
-
-    public ParseTreeListener(final Map<String, Class<? extends ParseNode>> nodeMap){
-        this.nodeMap = nodeMap;
+    public ParseTreeListener(final ParseNodeConstructorRepository repository){
+        this.repository = repository;
     }
 
+	/**
+     * {@inheritDoc}
+     */
     @Override
-    public void matchSuccess(final MatchSuccessEvent<V> event){
-
+    public void beforeMatch(final PreMatchEvent<V> event){
         final Context<V> context = event.getContext();
 
-        // No nodes if we are in a predicate, please
         if (context.inPredicate())
             return;
 
         final Matcher matcher = context.getMatcher();
 
-        // Nothing for actions either
         if (matcher.getType() == MatcherType.ACTION)
             return;
 
-        //get the label from the rule
-        final String label = matcher.getLabel();
+        final int level = context.getLevel();
+        final String ruleName = matcher.getLabel();
+        final Constructor<? extends ParseNode> constructor
+            = repository.getNodeConstructor(ruleName);
 
-        //get the ParseNode subclass from our cache
-        final Class<? extends ParseNode> nodeClass = nodeMap.get(label);
-
-        //if there was no mapping found, return
-        if (nodeClass == null)
+        if (constructor == null) {
+            if (level == 0)
+                throw new IllegalStateException();
             return;
-
-        //get the constructor of our ParseNode subclass
-        final Constructor<? extends ParseNode> constructor = getConstructor(
-                nodeClass);
-
-        //get the start and end of the match, and extract the match
-        final int start = context.getStartIndex();
-        final int end = context.getCurrentIndex();
-        final String match = context.getInputBuffer().extract(start, end);
-
-        //create our ParseNode subclass with the matched string passed in
-        final ParseNode node;
-        try {
-            node = constructor.newInstance(match);
-        } catch (InstantiationException | InvocationTargetException
-                | IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
-        //if (context.getLevel() == 0 && )
-        //builder.append(node);
-        System.out.println(node.getClass().getSimpleName() + " " +node.getValue() + ": " + context.getLevel());
+
+        final ParseNodeBuilder builder = new ParseNodeBuilder(constructor);
+
+        builders.put(level, builder);
     }
 
+	/**
+     * {@inheritDoc}
+     */
+    @Override
+    public void matchSuccess(final MatchSuccessEvent<V> event){
+        final Context<V> context = event.getContext();
 
+        if (context.inPredicate())
+            return;
 
-    private <T extends ParseNode> Constructor<T> getConstructor(
-            final Class<T> nodeClass)
-    {
-        try {
-            return nodeClass.getConstructor(String.class);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        final Matcher matcher = context.getMatcher();
+
+        if (matcher.getType() == MatcherType.ACTION)
+            return;
+
+        final String ruleName = matcher.getLabel();
+        final Constructor<? extends ParseNode> constructor
+            = repository.getNodeConstructor(ruleName);
+
+        if (constructor == null)
+            return;
+
+        final int level = context.getLevel();
+
+        final String match = getMatch(context);
+
+        final ParseNodeBuilder builder = builders.get(level);
+        builder.setMatch(match);
+
+        if (level == 0)
+            return;
+
+        final int previousLevel = builders.headMap(level).lastKey();
+
+        builders.get(previousLevel).addChild(builder);
+    }
+
+    public SortedMap<Integer, ParseNodeBuilder> getTree(){
+        return builders;
+    }
+
+    /**
+     * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeListener}
+     * @return      The root node.
+     */
+    public ParseNode getRootNode(){
+        return builders.get(0).build();
+    }
+
+	/**
+     * Get the matched {@code String} between the start and current index of the {@code Context} provided.
+     * @param context
+     * @return
+     */
+    private static String getMatch(final Context<?> context){
+        final int start = context.getStartIndex();
+        final int end = context.getCurrentIndex();
+        return context.getInputBuffer().extract(start, end);
     }
 }

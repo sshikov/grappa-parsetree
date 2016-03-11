@@ -15,6 +15,7 @@ public class Rule1Node extends ParseNode {
 	 */
 	@Override
 	public void accept(Visitor visitor) {
+		System.out.println("Rule1Node visited");
 		visitor.visit(this);
 	}
 }

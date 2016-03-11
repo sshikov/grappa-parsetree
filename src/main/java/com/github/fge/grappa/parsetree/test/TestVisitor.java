@@ -9,7 +9,8 @@ import com.github.fge.grappa.parsetree.visitors.Visitor;
 public class TestVisitor implements Visitor {
 
 
+	@Override
 	public void visit(ParseNode node) {
-
+		System.out.println(node.getValue());
 	}
 }

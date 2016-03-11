@@ -9,12 +9,14 @@ public class Rule6Node extends ParseNode {
 	public Rule6Node(final String value){
 		super(value);
 	}
+
 	////////////////// VISITABLE INTERFACE /////////////////////////////////////////////////////////////////////////////
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void accept(Visitor visitor) {
+		System.out.println("Rule6Node visited");
 		visitor.visit(this);
 	}
 }

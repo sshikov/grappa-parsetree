@@ -1,4 +1,4 @@
-package com.github.fge.grappa.parsetree.listeners;
+package com.github.fge.grappa.parsetree.builders;
 
 import com.github.fge.grappa.parsetree.nodes.ParseNode;
 
