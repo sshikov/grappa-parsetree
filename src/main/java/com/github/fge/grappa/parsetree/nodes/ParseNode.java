@@ -55,11 +55,8 @@ public abstract class ParseNode implements Visitable {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        for(ParseNode child : children){
-            child.accept(visitor);
-        }
-        System.out.println("Rule2Node visited");
+    public void accept(final Visitor visitor) {
+        children.forEach(visitor::visit);
         visitor.visit(this);
     }
 }

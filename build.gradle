@@ -15,14 +15,21 @@ targetCompatibility = javaVersion; // defaults to sourceCompatibility
 
 repositories {
     mavenCentral();
+    jcenter();
 }
 
 dependencies {
     compile(group: "com.github.fge", name: "grappa", version: "[2.0.4,)");
+    testCompile(group: "org.testng", name: "testng", version: "6.9.10") {
+        exclude(group: "org.apache.ant", module: "ant");
+        exclude(group: "com.google.inject", module: "guice");
+        exclude(group: "junit", module: "junit");
+        exclude(group: "org.beanshell", module: "bsh");
+        exclude(group: "org.yaml", module: "snakeyaml");
+    };
+    testCompile "org.mockito:mockito-core:1.+";
+    testCompile 'org.assertj:assertj-core:2.3.0';
 }
-
-javadoc.options.links("http://docs.oracle.com/javase/7/docs/api/");
-javadoc.options.links("https://fge.github.io/");
 
 /*
  * Necessary to generate the source and javadoc jars
@@ -35,6 +42,12 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = "javadoc";
     from javadoc.destinationDir;
+}
+
+test {
+    useTestNG() {
+        useDefaultListeners = true;
+    };
 }
 
 artifacts {
@@ -131,6 +144,11 @@ uploadArchives {
                 id "fge";
                 name "Francis Galiegue";
                 email "fgaliegue@gmail.com";
+            }
+            developer {
+                id "ChrisBrenton"
+                name "Chris Brenton"
+                email "chrisbrenton90@gmail.com"
             }
         }
     }

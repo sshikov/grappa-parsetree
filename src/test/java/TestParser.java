@@ -1,9 +1,6 @@
-package com.github.fge.grappa.parsetree.test;
-
 import com.github.fge.grappa.annotations.Label;
 import com.github.fge.grappa.parsers.BaseParser;
 import com.github.fge.grappa.parsetree.annotations.GenerateNode;
-import com.github.fge.grappa.parsetree.nodes.*;
 import com.github.fge.grappa.rules.Rule;
 
 /**

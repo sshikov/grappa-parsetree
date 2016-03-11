@@ -1,12 +1,11 @@
-package com.github.fge.grappa.parsetree.nodes;
-
+import com.github.fge.grappa.parsetree.nodes.ParseNode;
 import com.github.fge.grappa.parsetree.visitors.Visitor;
 
 /**
  * Created by Chris on 10/03/2016.
  */
-public class Rule5Node extends ParseNode {
-	public Rule5Node(final String value){
+public class Rule8Node extends ParseNode {
+	public Rule8Node(final String value){
 		super(value);
 	}
 	////////////////// VISITABLE INTERFACE /////////////////////////////////////////////////////////////////////////////
@@ -15,7 +14,7 @@ public class Rule5Node extends ParseNode {
 	 */
 	@Override
 	public void accept(Visitor visitor) {
-		System.out.println("Rule5Node visited");
+		System.out.println("Rule8Node visited");
 		super.accept(visitor);
 	}
 }

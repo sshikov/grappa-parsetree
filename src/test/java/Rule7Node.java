@@ -1,5 +1,4 @@
-package com.github.fge.grappa.parsetree.nodes;
-
+import com.github.fge.grappa.parsetree.nodes.ParseNode;
 import com.github.fge.grappa.parsetree.visitors.Visitor;
 
 /**

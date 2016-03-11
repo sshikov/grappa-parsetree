@@ -1,5 +1,3 @@
-package com.github.fge.grappa.parsetree.test;
-
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.parsetree.listeners.ParseNodeConstructorRepository;
 import com.github.fge.grappa.parsetree.listeners.ParseTreeListener;
@@ -17,6 +15,7 @@ public final class InspectionTest
 
 		final ParseNodeConstructorRepository repository
 			= new ParseNodeConstructorRepository(parserClass);
+
 		final TestParser parser = Grappa.createParser(parserClass);
 
 		final ListeningParseRunner<Object> runner
