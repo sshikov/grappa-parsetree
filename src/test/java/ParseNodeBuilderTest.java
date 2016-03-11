@@ -46,7 +46,7 @@ public class ParseNodeBuilderTest {
 		builder3.setMatch(VALUE);
 		builder1.addChild(builder3);
 		assertThat(builder1.build().hasChildren()).isTrue();
-		assertThat(builder1.build().getChildren().contains(builder3);
+		assertThat(builder1.build().getChildren().contains(builder3)).isTrue();
 	}
 
 	@Test
