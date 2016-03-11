@@ -16,6 +16,6 @@ public class Rule5Node extends ParseNode {
 	@Override
 	public void accept(Visitor visitor) {
 		System.out.println("Rule5Node visited");
-		visitor.visit(this);
+		super.accept(visitor);
 	}
 }

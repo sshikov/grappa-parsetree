@@ -1,13 +1,9 @@
 package com.github.fge.grappa.parsetree.test;
 
 import com.github.fge.grappa.Grappa;
-import com.github.fge.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.fge.grappa.parsetree.listeners.ParseNodeConstructorRepository;
 import com.github.fge.grappa.parsetree.listeners.ParseTreeListener;
 import com.github.fge.grappa.run.ListeningParseRunner;
-
-import java.util.Map;
-import java.util.SortedMap;
 
 public final class InspectionTest
 {
@@ -34,12 +30,11 @@ public final class InspectionTest
 		runner.registerListener(listener);
 		runner.run("afk");
 
+		/* There is nothing stopping the user from creating a list of visitors and having them all be accepted in
+		 * a loop, if they would like.
+		 */
 		TestVisitor v = new TestVisitor();
-
-		SortedMap<Integer, ParseNodeBuilder> tree = listener.getTree();
-		for (Map.Entry<Integer, ParseNodeBuilder> e : tree.entrySet()){
-			e.getValue().build().accept(v);
-		}
+		listener.getRootNode().accept(v);
 
 
         System.out.println("done");

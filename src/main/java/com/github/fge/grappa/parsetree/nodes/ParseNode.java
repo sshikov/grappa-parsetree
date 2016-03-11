@@ -1,5 +1,7 @@
 package com.github.fge.grappa.parsetree.nodes;
 
+import com.github.fge.grappa.parsetree.visitors.Visitor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +52,14 @@ public abstract class ParseNode implements Visitable {
      */
     public List<ParseNode> getChildren() {
         return children;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        for(ParseNode child : children){
+            child.accept(visitor);
+        }
+        System.out.println("Rule2Node visited");
+        visitor.visit(this);
     }
 }

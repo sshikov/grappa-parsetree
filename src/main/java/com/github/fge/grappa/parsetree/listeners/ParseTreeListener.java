@@ -95,12 +95,9 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
         builders.get(previousLevel).addChild(builder);
     }
 
-    public SortedMap<Integer, ParseNodeBuilder> getTree(){
-        return builders;
-    }
-
     /**
      * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeListener}
+     * This recursively builds all children, thus building a parse tree.
      * @return      The root node.
      */
     public ParseNode getRootNode(){
