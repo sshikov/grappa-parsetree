@@ -37,8 +37,8 @@ public final class InspectionTest
 		TestVisitor v = new TestVisitor();
 
 		SortedMap<Integer, ParseNodeBuilder> tree = listener.getTree();
-		for (Map.Entry e : tree.entrySet()){
-			((ParseNodeBuilder)e.getValue()).build().accept(v);
+		for (Map.Entry<Integer, ParseNodeBuilder> e : tree.entrySet()){
+			e.getValue().build().accept(v);
 		}
 
 
