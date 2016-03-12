@@ -1,15 +1,10 @@
 package com.github.chrisbrenton.grappa.parsetree.nodes;
 
-import com.github.chrisbrenton.grappa.parsetree.visitors.AbstractVisitor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author      ChrisBrenton
- * @version     09/03/2015
- */
+
 public abstract class ParseNode {
 
     private List<ParseNode> children = new ArrayList<>();
@@ -55,8 +50,4 @@ public abstract class ParseNode {
         return Collections.unmodifiableList(children);
     }
 
-    public void accept(final AbstractVisitor visitor) {
-        children.forEach(visitor::visit);
-        visitor.visit(this);
-    }
 }
