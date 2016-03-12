@@ -1,3 +1,4 @@
+import com.github.cbrenton.grappa.parsetree.visit.ChildNode;
 import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import org.mockito.InOrder;
@@ -7,13 +8,9 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
-public final class ParseNodeBuilderTest
-{
+public final class ParseNodeBuilderTest {
 	private static final String WHATEVER = "whatever";
 
 	/*
@@ -27,8 +24,9 @@ public final class ParseNodeBuilderTest
 
 	static {
 		try {
-			CONSTRUCTOR = TestNode.class.getConstructor(String.class);
-		} catch (NoSuchMethodException e) {
+			CONSTRUCTOR = ChildNode.class.getConstructor(String.class);
+		}
+		catch (NoSuchMethodException e) {
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -41,16 +39,14 @@ public final class ParseNodeBuilderTest
 	private ParseNodeBuilder child2;
 
 	@BeforeMethod
-	public void initBuilders()
-	{
+	public void initBuilders() {
 		parent = spy(new ParseNodeBuilder(CONSTRUCTOR));
 		child1 = spy(new ParseNodeBuilder(CONSTRUCTOR));
 		child2 = spy(new ParseNodeBuilder(CONSTRUCTOR));
 	}
 
 	@Test
-	public void childrenBuildersCalled()
-	{
+	public void childrenBuildersCalled() {
 		doReturn(childNode1).when(child1).build();
 		doReturn(childNode2).when(child2).build();
 

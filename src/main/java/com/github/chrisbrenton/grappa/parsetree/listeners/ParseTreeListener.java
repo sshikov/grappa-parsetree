@@ -4,28 +4,24 @@ import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
-import com.github.chrisbrenton.grappa.parsetree.visitors.AbstractVisitor;
 import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
+ * A {@link ParseTreeListener} listener is used as follows:
  *
- * @param <V>
  */
 public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     private final ParseNodeConstructorRepository repository;
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
-
-    private final List<AbstractVisitor> visitors = new ArrayList<>();
 
     public ParseTreeListener(final ParseNodeConstructorRepository repository){
         this.repository = repository;
@@ -43,7 +39,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
         final Matcher matcher = context.getMatcher();
 
-        if (matcher.getType() == MatcherType.ACTION)
+        if (Objects.requireNonNull(matcher).getType() == MatcherType.ACTION)
             return;
 
         final int level = context.getLevel();
@@ -74,7 +70,8 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
         final Matcher matcher = context.getMatcher();
 
-        if (matcher.getType() == MatcherType.ACTION)
+
+        if (Objects.requireNonNull(matcher).getType() == MatcherType.ACTION)
             return;
 
         final String ruleName = matcher.getLabel();
@@ -110,8 +107,8 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
 	/**
      * Get the matched {@code String} between the start and current index of the {@code Context} provided.
-     * @param context
-     * @return
+     * @param context       The context from which to retrieve a match.
+     * @return              The match
      */
     private static String getMatch(final Context<?> context){
         final int start = context.getStartIndex();

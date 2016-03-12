@@ -17,51 +17,49 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 
-public final class VisitorTest
-{
-    private DummyParser parser;
-    private ParseTreeListener<Void> listener;
+public final class VisitorTest {
+	private DummyParser parser;
+	private ParseTreeListener<Void> listener;
 
-    @BeforeMethod
-    public void init()
-    {
-        final Class<DummyParser> parserClass = DummyParser.class;
-        final ParseNodeConstructorRepository repository
-            = new ParseNodeConstructorRepository(parserClass);
+	@BeforeMethod
+	public void init() {
+		final Class<DummyParser> parserClass = DummyParser.class;
+		final ParseNodeConstructorRepository repository
+				= new ParseNodeConstructorRepository(parserClass);
 
-        parser = Grappa.createParser(parserClass);
-        listener = new ParseTreeListener<>(repository);
-    }
+		parser = Grappa.createParser(parserClass);
+		listener = new ParseTreeListener<>(repository);
+	}
 
-    @Test
-    public void visitOrderTest()
-    {
-        final ListeningParseRunner<Void> runner
-            = new ListeningParseRunner<>(parser.parent());
+	@Test
+	public void visitOrderTest() {
+		final ListeningParseRunner<Void> runner
+				= new ListeningParseRunner<>(parser.parent());
 
-        runner.registerListener(listener);
+		runner.registerListener(listener);
 
-        final ParsingResult<Void> result = runner.run("");
+		final ParsingResult<Void> result = runner.run("");
 
-        assertThat(result.isSuccess()).isTrue();
+		assertThat(result.isSuccess()).isTrue();
 
-        final ParseNode node = listener.getRootNode();
+		final ParseNode node = listener.getRootNode();
 
-        assertThat(node).isInstanceOf(ParentNode.class);
+		assertThat(node).isInstanceOf(ParentNode.class);
 
-        for (final ParseNode child: node.getChildren())
-            assertThat(child).isInstanceOf(ChildNode.class);
+		for (final ParseNode child : node.getChildren()) {
+			assertThat(child).isInstanceOf(ChildNode.class);
+		}
 
-        final DummyVisitor visitor = spy(new DummyVisitor());
+		final DummyVisitor visitor = spy(new DummyVisitor());
 
-        final VisitorRunner visitorRunner = new VisitorRunner(node);
-        visitorRunner.addVisitor(visitor);
+		final VisitorRunner visitorRunner = new VisitorRunner(node);
+		visitorRunner.registerVisitor(visitor);
 
-        visitorRunner.run();
+		visitorRunner.run();
 
-        final InOrder inOrder = Mockito.inOrder(visitor);
-        inOrder.verify(visitor, times(2)).visit(any(ChildNode.class));
-        inOrder.verify(visitor).visit(any(ParentNode.class));
-        inOrder.verifyNoMoreInteractions();
-    }
+		final InOrder inOrder = Mockito.inOrder(visitor);
+		inOrder.verify(visitor, times(2)).visit(any(ChildNode.class));
+		inOrder.verify(visitor).visit(any(ParentNode.class));
+		inOrder.verifyNoMoreInteractions();
+	}
 }

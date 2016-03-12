@@ -18,4 +18,6 @@ public class DummyParser
     {
         return EMPTY;
     }
+
+    public Rule noAnnotation() { return NOTHING; }
 }

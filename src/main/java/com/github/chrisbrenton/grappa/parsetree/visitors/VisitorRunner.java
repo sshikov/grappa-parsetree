@@ -55,7 +55,7 @@ public final class VisitorRunner
      *
      * @param visitor the visitor
      */
-    public void addVisitor(final Visitor visitor)
+    public void registerVisitor(final Visitor visitor)
     {
         bus.register(Objects.requireNonNull(visitor));
     }
