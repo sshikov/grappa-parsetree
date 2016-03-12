@@ -8,6 +8,7 @@ import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Constructor;
 import java.util.Objects;
@@ -19,6 +20,10 @@ import java.util.TreeMap;
  *
  */
 public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
+    @VisibleForTesting
+    static final String NO_ANNOTATION_ON_ROOT_RULE
+        = "root rule has no @GenerateNode annotation";
+
     private final ParseNodeConstructorRepository repository;
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
@@ -49,7 +54,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
         if (constructor == null) {
             if (level == 0)
-                throw new IllegalStateException();
+                throw new IllegalStateException(NO_ANNOTATION_ON_ROOT_RULE);
             return;
         }
 
