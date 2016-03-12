@@ -19,7 +19,7 @@ public final class InspectionTest
 		final TestParser parser = Grappa.createParser(parserClass);
 
 		final ListeningParseRunner<Object> runner
-			= new ListeningParseRunner<>(parser.rule1());
+			= new ListeningParseRunner<>(parser.test());
 
 		final ParseTreeListener<Object> listener
 			= new ParseTreeListener<>(repository);

@@ -28,7 +28,7 @@ public final class ParseNodeBuilderTest
 
 	static {
 		try {
-			CONSTRUCTOR = Rule1Node.class.getConstructor(String.class);
+			CONSTRUCTOR = TestNode.class.getConstructor(String.class);
 		} catch (NoSuchMethodException e) {
 			throw new ExceptionInInitializerError(e);
 		}

@@ -14,7 +14,7 @@ public class TestVisitor extends AbstractVisitor {
 
 	}
 
-	public void visit(Rule1Node node){
+	public void visit(TestNode node){
 
 	}
 }
