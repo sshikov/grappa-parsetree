@@ -9,6 +9,7 @@ import com.github.fge.grappa.rules.Rule;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ParseNodeConstructorRepository
@@ -59,7 +60,7 @@ public final class ParseNodeConstructorRepository
             return null;
 
         try {
-            return ann.value().getConstructor(String.class);
+            return ann.value().getConstructor(String.class, List.class);
         } catch (NoSuchMethodException e) {
             // TODO: better error message
             throw new RuntimeException(e);

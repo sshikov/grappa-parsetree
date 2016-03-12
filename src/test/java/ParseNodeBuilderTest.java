@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -24,7 +25,7 @@ public final class ParseNodeBuilderTest {
 
 	static {
 		try {
-			CONSTRUCTOR = ChildNode.class.getConstructor(String.class);
+			CONSTRUCTOR = ChildNode.class.getConstructor(String.class, List.class);
 		}
 		catch (NoSuchMethodException e) {
 			throw new ExceptionInInitializerError(e);
