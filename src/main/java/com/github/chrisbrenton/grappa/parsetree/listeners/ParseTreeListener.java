@@ -14,7 +14,6 @@ import com.github.fge.grappa.run.events.PreMatchEvent;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Constructor;
-import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -31,9 +30,9 @@ import java.util.TreeMap;
  * GrappaException}).</p>
  *
  * <p>Also, an attempt to retrieve a parse tree of a failed match will throw
- * an {@link IllegalStateException} will be thrown as well. To prevent this, you
- * should check whether the match is a success (using {@link
- * ParsingResult#isSuccess()}) before retrieving the parse tree.</p>
+ * an {@link IllegalStateException} as well. To prevent this, you should check
+ * whether the match is a success (using {@link ParsingResult#isSuccess()})
+ * before retrieving the parse tree.</p>
  */
 public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     @VisibleForTesting
@@ -73,23 +72,18 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     @Override
     public void beforeMatch(final PreMatchEvent<V> event){
         final Context<V> context = event.getContext();
-
-        if (context.inPredicate())
-            return;
-
-        final Matcher matcher = context.getMatcher();
-
-        if (Objects.requireNonNull(matcher).getType() == MatcherType.ACTION)
-            return;
-
         final int level = context.getLevel();
-        final String ruleName = matcher.getLabel();
-        final Constructor<? extends ParseNode> constructor
-            = repository.getNodeConstructor(ruleName);
+        final Constructor<? extends ParseNode> constructor = findConstructor(context);
 
         if (constructor == null) {
-            if (level == 0)
+            /*
+             * If this is the root rule, a @GenerateNode annotation is required.
+             *
+             * If it was not found, this is an error: yell at the user.
+             */
+            if (level == 0) {
                 throw new IllegalStateException(NO_ANNOTATION_ON_ROOT_RULE);
+            }
             return;
         }
 
@@ -104,30 +98,21 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     @Override
     public void matchSuccess(final MatchSuccessEvent<V> event){
         final Context<V> context = event.getContext();
-
-        if (context.inPredicate())
-            return;
-
-        final Matcher matcher = context.getMatcher();
-
-
-        if (Objects.requireNonNull(matcher).getType() == MatcherType.ACTION)
-            return;
-
-        final String ruleName = matcher.getLabel();
-        final Constructor<? extends ParseNode> constructor
-            = repository.getNodeConstructor(ruleName);
+        final int level = context.getLevel();
+        final Constructor<? extends ParseNode> constructor = findConstructor(context);
 
         if (constructor == null)
             return;
-
-        final int level = context.getLevel();
 
         final String match = getMatch(context);
 
         final ParseNodeBuilder builder = builders.get(level);
         builder.setMatch(match);
 
+        /*
+         * If we are back to level 0, we are done. Declare success so that the
+         * user can retrieve the parse tree.
+         */
         if (level == 0) {
             success = true;
             return;
@@ -160,5 +145,29 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
         final int start = context.getStartIndex();
         final int end = context.getCurrentIndex();
         return context.getInputBuffer().extract(start, end);
+    }
+
+    private Constructor<? extends ParseNode> findConstructor(final Context<V> context) {
+        /*
+         * Never attempt to retrieve a constructor if we are in a predicate!
+         */
+        if (context.inPredicate())
+            return null;
+
+        final Matcher matcher = context.getMatcher();
+
+        // FIXME: in theory this should never happen. In theory.
+        if (matcher == null)
+            return null;
+
+        /*
+         * Actions are no good either.
+         *
+         * TODO: this should not happen either; actions are not rules
+         */
+        if (matcher.getType() == MatcherType.ACTION)
+            return null;
+
+        return repository.getNodeConstructor(matcher.getLabel());
     }
 }
