@@ -3,6 +3,7 @@ package com.github.fge.grappa.parsetree.nodes;
 import com.github.fge.grappa.parsetree.visitors.Visitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public abstract class ParseNode implements Visitable {
      * @return          <b>true</b> if this {@code Tree} has children, <b>false</b> otherwise
      */
     public boolean hasChildren() {
-        return children.size() > 0;
+        return !children.isEmpty();
     }
 
     /**
@@ -51,7 +52,7 @@ public abstract class ParseNode implements Visitable {
      * @return          The children of this {@code Tree}, returns empty list if no children are found.
      */
     public List<ParseNode> getChildren() {
-        return children;
+        return Collections.unmodifiableList(children);
     }
 
     @Override
