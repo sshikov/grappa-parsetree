@@ -1,5 +1,6 @@
 package com.github.fge.grappa.parsetree.builders;
 
+import com.github.fge.grappa.internal.NonFinalForTesting;
 import com.github.fge.grappa.parsetree.nodes.ParseNode;
 
 import java.lang.reflect.Constructor;
@@ -8,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class ParseNodeBuilder
+@NonFinalForTesting
+public class ParseNodeBuilder
 {
     private final Constructor<? extends ParseNode> constructor;
     private final List<ParseNodeBuilder> builders = new ArrayList<>();
