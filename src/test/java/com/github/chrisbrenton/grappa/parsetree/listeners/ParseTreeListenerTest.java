@@ -48,4 +48,21 @@ public class ParseTreeListenerTest {
                 .hasMessage(ParseTreeListener.NO_ANNOTATION_ON_ROOT_RULE);
         }
     }
+
+    @Test
+    public void failToRetrieveParseTreeOnParseFailure() {
+        final ListeningParseRunner<Object> runner
+            = new ListeningParseRunner<>(parser.failingRule());
+
+        runner.registerListener(listener);
+
+        runner.run("");
+
+        try {
+            listener.getRootNode();
+            shouldHaveThrown(IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            assertThat(e).hasMessage(ParseTreeListener.MATCH_FAILURE);
+        }
+    }
 }

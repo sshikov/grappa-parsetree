@@ -24,9 +24,15 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";
 
+    @VisibleForTesting
+    static final String MATCH_FAILURE
+        = "cannot retrieve a parse tree from a failing match";
+
     private final ParseNodeConstructorRepository repository;
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
+
+    private boolean success = false;
 
     public ParseTreeListener(final ParseNodeConstructorRepository repository){
         this.repository = repository;
@@ -93,8 +99,10 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
         final ParseNodeBuilder builder = builders.get(level);
         builder.setMatch(match);
 
-        if (level == 0)
+        if (level == 0) {
+            success = true;
             return;
+        }
 
         final int previousLevel = builders.headMap(level).lastKey();
 
@@ -105,8 +113,12 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
      * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeListener}
      * This recursively builds all children, thus building a parse tree.
      * @return      The root node.
+     * @exception IllegalStateException Attempt to retrieve the parse tree from
+     * a failed match
      */
     public ParseNode getRootNode(){
+        if (!success)
+            throw new IllegalStateException(MATCH_FAILURE);
         return builders.get(0).build();
     }
 
