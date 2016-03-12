@@ -1,10 +1,13 @@
 package com.github.chrisbrenton.grappa.parsetree.listeners;
 
+import com.github.chrisbrenton.grappa.parsetree.annotations.GenerateNode;
 import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
 import com.github.fge.grappa.run.ParseRunnerListener;
+import com.github.fge.grappa.run.ParsingResult;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
@@ -16,8 +19,21 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * A {@link ParseTreeListener} listener is used as follows:
+ * Parse runner listener used to build a parse tree
  *
+ * <p>This listener will create {@link ParseNodeBuilder} instances (for rules
+ * annotated with {@link GenerateNode} only) and build the parse tree when the
+ * user calls {@link #getRootNode()}.</p>
+ *
+ * <p>It is required that the root rule have such an annotation (it would be
+ * impossible to build a parse tree otherwise); if this is not the case, an
+ * {@link IllegalStateException} will be thrown (wrapped in a {@link
+ * GrappaException}).</p>
+ *
+ * <p>Also, an attempt to retrieve a parse tree of a failed match will throw
+ * an {@link IllegalStateException} will be thrown as well. To prevent this, you
+ * should check whether the match is a success (using {@link
+ * ParsingResult#isSuccess()}) before retrieving the parse tree.</p>
  */
 public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     @VisibleForTesting
@@ -32,8 +48,21 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
+    /*
+     * Check for success at the end of the parsing (that is, the matcher at
+     * level 0 matches successfully).
+     *
+     * On failure, the parse tree is meaningless, so we use that to prevent the
+     * user from returning a nonsensical parse tree (the build method of
+     * ParseNodeBuilder would throw an NPE anyway).
+     */
     private boolean success = false;
 
+    /**
+     * Constructor
+     *
+     * @param repository the parse node constructors repository
+     */
     public ParseTreeListener(final ParseNodeConstructorRepository repository){
         this.repository = repository;
     }
