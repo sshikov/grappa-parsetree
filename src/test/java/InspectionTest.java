@@ -1,6 +1,6 @@
 import com.github.fge.grappa.Grappa;
-import com.github.fge.grappa.parsetree.listeners.ParseNodeConstructorRepository;
-import com.github.fge.grappa.parsetree.listeners.ParseTreeListener;
+import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
+import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
 import com.github.fge.grappa.run.ListeningParseRunner;
 
 public final class InspectionTest

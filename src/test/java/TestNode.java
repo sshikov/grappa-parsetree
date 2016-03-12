@@ -1,4 +1,4 @@
-import com.github.fge.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 
 /**
  * @author Chris <chrisbrenton90@gmail.com>

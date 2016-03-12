@@ -1,6 +1,5 @@
-import com.github.fge.grappa.internal.NonFinalForTesting;
-import com.github.fge.grappa.parsetree.builders.ParseNodeBuilder;
-import com.github.fge.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
+import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

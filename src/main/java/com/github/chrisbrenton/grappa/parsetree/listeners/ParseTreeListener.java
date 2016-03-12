@@ -1,10 +1,10 @@
-package com.github.fge.grappa.parsetree.listeners;
+package com.github.chrisbrenton.grappa.parsetree.listeners;
 
+import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
+import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
-import com.github.fge.grappa.parsetree.builders.ParseNodeBuilder;
-import com.github.fge.grappa.parsetree.nodes.ParseNode;
-import com.github.fge.grappa.parsetree.visitors.Visitor;
+import com.github.chrisbrenton.grappa.parsetree.visitors.AbstractVisitor;
 import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
@@ -25,7 +25,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
-    private final List<Visitor> visitors = new ArrayList<>();
+    private final List<AbstractVisitor> visitors = new ArrayList<>();
 
     public ParseTreeListener(final ParseNodeConstructorRepository repository){
         this.repository = repository;

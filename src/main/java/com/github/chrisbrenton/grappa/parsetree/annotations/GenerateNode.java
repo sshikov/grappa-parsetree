@@ -1,10 +1,10 @@
-package com.github.fge.grappa.parsetree.annotations;
+package com.github.chrisbrenton.grappa.parsetree.annotations;
 
 /**
  * Created by Chris on 10/03/2016.
  */
 
-import com.github.fge.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

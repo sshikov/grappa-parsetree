@@ -1,6 +1,6 @@
-package com.github.fge.grappa.parsetree.nodes;
+package com.github.chrisbrenton.grappa.parsetree.nodes;
 
-import com.github.fge.grappa.parsetree.visitors.Visitor;
+import com.github.chrisbrenton.grappa.parsetree.visitors.AbstractVisitor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import java.util.List;
  * @author      ChrisBrenton
  * @version     09/03/2015
  */
-public abstract class ParseNode implements Visitable {
+public abstract class ParseNode {
 
     private List<ParseNode> children = new ArrayList<>();
     private String value = null;
@@ -55,8 +55,7 @@ public abstract class ParseNode implements Visitable {
         return Collections.unmodifiableList(children);
     }
 
-    @Override
-    public void accept(final Visitor visitor) {
+    public void accept(final AbstractVisitor visitor) {
         children.forEach(visitor::visit);
         visitor.visit(this);
     }

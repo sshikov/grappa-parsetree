@@ -1,5 +1,5 @@
-import com.github.fge.grappa.parsetree.nodes.ParseNode;
-import com.github.fge.grappa.parsetree.visitors.AbstractVisitor;
+import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.visitors.AbstractVisitor;
 
 /**
  * @author Chris <chrisbrenton90@gmail.com>
