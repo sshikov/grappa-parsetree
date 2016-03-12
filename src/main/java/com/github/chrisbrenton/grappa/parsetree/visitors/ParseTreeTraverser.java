@@ -14,9 +14,7 @@ public final class ParseTreeTraverser
     public static final TreeTraverser<ParseNode> INSTANCE
         = new ParseTreeTraverser();
 
-    private ParseTreeTraverser()
-    {
-    }
+    private ParseTreeTraverser(){}
 
     @Override
     public Iterable<ParseNode> children(final ParseNode root)
