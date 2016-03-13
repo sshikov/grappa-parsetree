@@ -1,7 +1,8 @@
 package com.github.chrisbrenton.grappa.parsetree.annotations;
 
 /**
- * Created by Chris on 10/03/2016.
+ * The annotation required above {@link com.github.fge.grappa.rules.Rule} methods in order to
+ * create a {@link ParseNode} instance in the Parse Tree generated.
  */
 
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
@@ -14,7 +15,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GenerateNode
-{
+public @interface GenerateNode {
 	Class<? extends ParseNode> value();
 }

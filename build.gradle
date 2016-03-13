@@ -5,8 +5,8 @@ apply(plugin: "osgi");
 apply(plugin: "idea");
 apply(plugin: "eclipse");
 
-group = "com.github.fge";
-description = "A simple parse tree module for grappa (2.0.x)";
+group = "com.github.chrisbrenton";
+description = "A Parse Tree extension for Grappa (2.0.x)";
 version = "1.0.0-SNAPSHOT";
 
 def javaVersion = JavaVersion.VERSION_1_8;
@@ -66,9 +66,9 @@ task wrapper(type: Wrapper) {
  */
 
 project.ext {
-    gitrwscm = sprintf("git@github.com:fge/%s", name);
-    gitroscm = sprintf("https://github.com/fge/%s.git", name);
-    projectURL = sprintf("https://github.com/fge/%s", name);
+    gitrwscm = sprintf("git@github.com:chrisbrenton/%s", name);
+    gitroscm = sprintf("https://github.com/ChrisBrenton/%s.git", name);
+    projectURL = sprintf("https://github.com/ChrisBrenton/%s", name);
     sonatypeStaging = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
     sonatypeSnapshots = "https://oss.sonatype.org/content/repositories/snapshots/";
 };
@@ -141,14 +141,14 @@ uploadArchives {
 
         developers {
             developer {
-                id "fge";
-                name "Francis Galiegue";
-                email "fgaliegue@gmail.com";
-            }
-            developer {
                 id "ChrisBrenton"
                 name "Chris Brenton"
                 email "chrisbrenton90@gmail.com"
+            }
+            developer {
+                id "fge";
+                name "Francis Galiegue";
+                email "fgaliegue@gmail.com";
             }
         }
     }
