@@ -1,18 +1,19 @@
 package com.github.chrisbrenton.grappa.parsetree.nodes;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 
 public abstract class ParseNode {
 
-    private List<ParseNode> children = new ArrayList<>();
-    private String value = null;
+    private final List<ParseNode> children;
+    private final String value;
 
     /* Public Constructors */
-    public ParseNode(String value){
+    protected ParseNode(final String value, final List<ParseNode> children){
         this.value = value;
+        this.children = ImmutableList.copyOf(children);
     }
 
 
@@ -25,18 +26,8 @@ public abstract class ParseNode {
     }
 
     /**
-     * Add a child to the {@code ParseNode} with this value
-     * @param value     The value of the node to add
-     * @return          Whether the value was successfully added
-     */
-    public boolean addChild(ParseNode value) {
-        return children.add(value);
-    }
-
-
-    /**
      * Returns whether or not this {@code ParseNode} has children.
-     * @return          <b>true</b> if this {@code Tree} has children, <b>false</b> otherwise
+     * @return          <b>true</b> if this parse node has children, <b>false</b> otherwise
      */
     public boolean hasChildren() {
         return !children.isEmpty();
@@ -47,7 +38,8 @@ public abstract class ParseNode {
      * @return          The children of this {@code Tree}, returns empty list if no children are found.
      */
     public List<ParseNode> getChildren() {
-        return Collections.unmodifiableList(children);
+        // This is an ImmutableList; no risk of it being modified by the user
+        return children;
     }
 
 }

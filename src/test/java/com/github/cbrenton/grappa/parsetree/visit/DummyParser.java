@@ -20,4 +20,12 @@ public class DummyParser
     }
 
     public Rule noAnnotation() { return NOTHING; }
+
+    /*
+     * Make this one fail on purpose for testing
+     */
+    @GenerateNode(ParentNode.class)
+    public Rule failingRule() {
+        return NOTHING;
+    }
 }

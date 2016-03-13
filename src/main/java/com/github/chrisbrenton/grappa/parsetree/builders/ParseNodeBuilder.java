@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @NonFinalForTesting
 public class ParseNodeBuilder
@@ -15,7 +16,7 @@ public class ParseNodeBuilder
     private final Constructor<? extends ParseNode> constructor;
     private final List<ParseNodeBuilder> builders = new ArrayList<>();
 
-    private String match = null;
+    private String match;
 
     public ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
     {
@@ -37,17 +38,16 @@ public class ParseNodeBuilder
         Objects.requireNonNull(constructor);
         Objects.requireNonNull(match);
 
-        final ParseNode ret;
+        final List<ParseNode> children = builders.stream()
+            .map(ParseNodeBuilder::build)
+            .collect(Collectors.toList());
+
         try {
-            ret = constructor.newInstance(match);
+            return constructor.newInstance(match, children);
         } catch (InstantiationException | IllegalAccessException
             | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-
-        builders.stream().map(ParseNodeBuilder::build).forEach(ret::addChild);
-
-        return ret;
     }
 
     @Override
