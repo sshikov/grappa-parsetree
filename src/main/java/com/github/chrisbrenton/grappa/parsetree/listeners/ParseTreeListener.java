@@ -9,6 +9,7 @@ import com.github.fge.grappa.matchers.base.Matcher;
 import com.github.fge.grappa.run.ParseRunnerListener;
 import com.github.fge.grappa.run.ParsingResult;
 import com.github.fge.grappa.run.context.Context;
+import com.github.fge.grappa.run.events.MatchFailureEvent;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
 import com.google.common.annotations.VisibleForTesting;
@@ -121,6 +122,16 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
         final int previousLevel = builders.headMap(level).lastKey();
 
         builders.get(previousLevel).addChild(builder);
+    }
+
+    @Override
+    public void matchFailure(final MatchFailureEvent<V> event) {
+        final Context<V> context = event.getContext();
+        final int level = context.getLevel();
+        final Constructor<? extends ParseNode> constructor = findConstructor(context);
+
+        if (constructor != null)
+            builders.remove(level);
     }
 
     /**
