@@ -1,4 +1,4 @@
-import com.github.cbrenton.grappa.parsetree.visit.ChildNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
 import com.github.chrisbrenton.grappa.parsetree.builders.ParseNodeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import org.mockito.InOrder;

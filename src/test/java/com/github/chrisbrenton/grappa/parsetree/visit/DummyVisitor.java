@@ -1,4 +1,4 @@
-package com.github.cbrenton.grappa.parsetree.visit;
+package com.github.chrisbrenton.grappa.parsetree.visit;
 
 import com.github.chrisbrenton.grappa.parsetree.visitors.Visitor;
 import com.google.common.eventbus.Subscribe;

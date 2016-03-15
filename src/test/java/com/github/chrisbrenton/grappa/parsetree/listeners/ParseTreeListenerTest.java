@@ -1,6 +1,6 @@
 package com.github.chrisbrenton.grappa.parsetree.listeners;
 
-import com.github.cbrenton.grappa.parsetree.visit.DummyParser;
+import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.run.ListeningParseRunner;
@@ -30,6 +30,10 @@ public class ParseTreeListenerTest {
         listener = new ParseTreeListener<>(repository);
     }
 
+    /*
+     * If root is not annotated, then no node can be created, and as such a tree cannot be
+     * created beneath it.
+     */
     @Test
     public void failIfRootRuleIsNotAnnotated() {
         final ListeningParseRunner<Object> runner
@@ -49,6 +53,9 @@ public class ParseTreeListenerTest {
         }
     }
 
+	/**
+     * If parsing fails, then ensure that no parse tree is returned.
+     */
     @Test
     public void failToRetrieveParseTreeOnParseFailure() {
         final ListeningParseRunner<Object> runner
@@ -65,4 +72,5 @@ public class ParseTreeListenerTest {
             assertThat(e).hasMessage(ParseTreeListener.MATCH_FAILURE);
         }
     }
+
 }

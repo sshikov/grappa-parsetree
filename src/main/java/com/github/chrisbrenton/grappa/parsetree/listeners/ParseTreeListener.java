@@ -124,19 +124,20 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
         builders.get(previousLevel).addChild(builder);
     }
 
+
+	/**
+     * {@inheritDoc}
+     */
     @Override
     public void matchFailure(final MatchFailureEvent<V> event) {
-        final Context<V> context = event.getContext();
-        final int level = context.getLevel();
-        final Constructor<? extends ParseNode> constructor = findConstructor(context);
-
-        if (constructor != null)
-            builders.remove(level);
+        /* If there is an error at all, remove this builder. */
+        builders.remove(event.getContext().getLevel());
     }
 
     /**
      * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeListener}
      * This recursively builds all children, thus building a parse tree.
+     *
      * @return      The root node.
      * @exception IllegalStateException Attempt to retrieve the parse tree from
      * a failed match
@@ -148,7 +149,9 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     }
 
 	/**
-     * Get the matched {@code String} between the start and current index of the {@code Context} provided.
+     * Get the matched {@code String} between the start and current index of the {@code Context}
+     * provided.
+     *
      * @param context       The context from which to retrieve a match.
      * @return              The match
      */

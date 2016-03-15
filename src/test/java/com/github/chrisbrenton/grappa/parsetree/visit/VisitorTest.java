@@ -1,4 +1,4 @@
-package com.github.cbrenton.grappa.parsetree.visit;
+package com.github.chrisbrenton.grappa.parsetree.visit;
 
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
@@ -31,6 +31,10 @@ public final class VisitorTest {
 		listener = new ParseTreeListener<>(repository);
 	}
 
+	/*
+	 * Ensure that all children are visited, and then the parents are visited. No further
+	 * interactions should occur.
+	 */
 	@Test
 	public void visitOrderTest() {
 		final ListeningParseRunner<Void> runner

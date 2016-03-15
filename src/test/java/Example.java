@@ -1,5 +1,5 @@
-import com.github.cbrenton.grappa.parsetree.visit.DummyParser;
-import com.github.cbrenton.grappa.parsetree.visit.DummyVisitor;
+import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
+import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
 import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
