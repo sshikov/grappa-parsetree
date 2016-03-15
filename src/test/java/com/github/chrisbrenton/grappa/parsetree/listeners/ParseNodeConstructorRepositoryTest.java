@@ -37,7 +37,7 @@ public final class ParseNodeConstructorRepositoryTest {
 		}
 		catch (IllegalStateException e) {
 			final String msg = String.format(ParseNodeConstructorRepository.DUPLICATE_NAME,
-			                                 DuplicateLabelParser.class.getSimpleName());
+			                                 "theRule");
 			assertThat(e).hasMessage(msg);
 		}
 	}

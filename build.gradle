@@ -7,7 +7,7 @@ apply(plugin: "eclipse");
 
 group = "com.github.chrisbrenton";
 description = "A Parse Tree extension for Grappa (2.0.x)";
-version = "1.0.0-SNAPSHOT";
+version = "1.0.0";
 
 def javaVersion = JavaVersion.VERSION_1_8;
 sourceCompatibility = javaVersion;
@@ -79,7 +79,7 @@ task checkSigningRequirements << {
     requiredProperties.each {
         if (project.properties[it] == null) {
             noDice = true;
-            System.err.printf("property \"%s\" is not defined!", it);
+            System.err.printf("property \"%s\" is not defined!%n", it);
         }
     }
     if (noDice)

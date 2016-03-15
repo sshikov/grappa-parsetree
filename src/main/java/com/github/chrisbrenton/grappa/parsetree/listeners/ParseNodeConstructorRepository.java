@@ -16,24 +16,19 @@ import java.util.Objects;
 
 /**
  * A class to collect all constructors for parse nodes defined in a parser
- * <p>
  * <p>This class takes a parser class as an argument and will look up all the
  * rules (methods returning a {@link Rule}. If a rule is further annotated with
  * {@link GenerateNode}, it will take the argument to this annotation and find
  * a suitable constructor.</p>
- * <p>
  * <p>The constructor must obey two criteria:</p>
- * <p>
  * <ul>
  * <li>it must be {@code public},</li>
  * <li>it must take two arguments: a {@link String} (the text matched by the
  * node) and a {@link List} of {@link ParseNode}s (its children nodes).</li>
  * </ul>
- * <p>
  * <p>Furthermore, it will associate the found constructor with a rule label; it
  * is either the method name or, if the rule is further annotated with {@link
  * Label}, then the value of this annotation.</p>
- * <p>
  * <p>It is illegal for two rules to have the same label: should that happen,
  * an {@link IllegalStateException} is thrown.</p>
  *
