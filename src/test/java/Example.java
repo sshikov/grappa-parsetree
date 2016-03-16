@@ -1,4 +1,4 @@
-import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
+import com.github.chrisbrenton.grappa.parsetree.listeners.DummyParser;
 import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
 import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
@@ -32,7 +32,7 @@ public final class Example {
 
 		/* The runner that listens for events from the parser */
 		final ListeningParseRunner<Object> runner
-				= new ListeningParseRunner<>(parser.parent());
+				= new ListeningParseRunner<>(parser.ruleRoot());
 
 		/* The class that will build the parse tree */
 		final ParseTreeListener<Object> listener
