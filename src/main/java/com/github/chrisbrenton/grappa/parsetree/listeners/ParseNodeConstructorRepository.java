@@ -69,11 +69,11 @@ public final class ParseNodeConstructorRepository {
 	}
 
 	/**
-	 * Get the constructor for a given parse node class
+	 * Get the constructor for a given parse node class.
 	 *
-	 * @param ruleName the name of the rule
+	 * @param ruleName the name of the rule.
 	 *
-	 * @return the constructor; {@code null} if not found
+	 * @return the constructor; {@code null} if not found.
 	 */
 	public Constructor<? extends ParseNode> getNodeConstructor(final String ruleName) {
 		return constructors.get(ruleName);

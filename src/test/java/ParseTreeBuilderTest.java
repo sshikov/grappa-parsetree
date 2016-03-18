@@ -54,7 +54,7 @@ public final class ParseTreeBuilderTest {
 		doReturn(childNode1).when(child1).build();
 		doReturn(childNode2).when(child2).build();
 
-		parent.setMatch(WHATEVER);
+		parent.setMatchedText(WHATEVER);
 		parent.addChild(child1);
 		parent.addChild(child2);
 

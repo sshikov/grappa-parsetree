@@ -5,14 +5,15 @@ import com.github.chrisbrenton.grappa.parsetree.visitors.VisitOrder;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The basic class for a parse node of a generated parse tree
  *
- * <p>The generated parse tree (which you retrieve using {@link
- * ParseTreeListener#getRootNode()}) is in fact an instance of an implementation
+ * <p>The generated parse tree (which can be retrieved using {@link
+ * ParseTreeListener#getRootNode()}) is an instance of an implementation
  * of this class. This class provides access to all of its children (using
- * {@link #getChildren()}, which is what allows several traversal modes; see
+ * {@link #getChildren()}, and allows several traversal modes; see
  * {@link VisitOrder} for more details. A convenience method is also provided to
  * check whether a node has children at all: {@link #hasChildren()}.</p>
  *
@@ -46,43 +47,43 @@ public abstract class ParseNode {
      * Base constructor
      *
      * @param matchedText the text matched by this node (see {@link
-     * #getMatchedText()}
-     * @param children the children of this node
+     * #getMatchedText()}.
+     * @param children the children of this node.
      */
     protected ParseNode(final String matchedText, final List<ParseNode> children){
-        this.matchedText = matchedText;
+        this.matchedText = Objects.requireNonNull(matchedText);
         this.children = ImmutableList.copyOf(children);
     }
 
 
 	/**
-	 * Get a semantically meaningful text representation of this node, if any
+	 * Get a semantically meaningful text representation of this node, if any.
      *
      * <p>Implementations are encouraged to override the default implementation;
-     * see this class's description for more details</p>
+     * see this class's description for more details.</p>
      *
-     * @return a semantically meaningful text representation of this node
+     * @return a semantically meaningful text representation of this node.
      */
     public String getValue(){
         return matchedText;
     }
 
     /**
-     * Returns whether or not this node has children
+     * Returns whether or not this node has children.
      *
-     * @return {@code true} if and only if this parse node has children
+     * @return {@code true} if and only if this parse node has children.
      */
     public final boolean hasChildren() {
         return !children.isEmpty();
     }
 
     /**
-     * Get the children of this node, as a {@link List}
+     * Get the children of this node, as a {@link List}.
      *
      * <p>Note that the returned list is <em>immutable</em>.</p>
      *
      * @return the children of this node, if any; an empty list if no children
-     * are present
+     * are present.
      */
     public final List<ParseNode> getChildren() {
         // This is an ImmutableList; no risk of it being modified by the user
