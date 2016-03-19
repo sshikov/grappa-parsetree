@@ -1,8 +1,7 @@
-package com.github.chrisbrenton.grappa.parsetree.listeners;
+package com.github.chrisbrenton.grappa.parsetree.build;
 
-import com.github.chrisbrenton.grappa.parsetree.annotations.GenerateNode;
-import com.github.chrisbrenton.grappa.parsetree.builders.ParseTreeBuilder;
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
@@ -21,9 +20,9 @@ import java.util.TreeMap;
 /**
  * Parse runner listener used to build a parse tree
  *
- * <p>This listener will create {@link ParseTreeBuilder} instances (for rules
+ * <p>This listener will create {@link ParseNodeBuilder} instances (for rules
  * annotated with {@link GenerateNode} only) and build the parse tree when the
- * user calls {@link #getRootNode()}.</p>
+ * user calls {@link #getTree()}.</p>
  *
  * <p>It is required that the root rule have such an annotation (it would be
  * impossible to build a parse tree otherwise); if this is not the case, an
@@ -35,7 +34,7 @@ import java.util.TreeMap;
  * whether the match is a success (using {@link ParsingResult#isSuccess()})
  * before retrieving the parse tree.</p>
  */
-public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
+public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
     @VisibleForTesting
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";
@@ -44,9 +43,9 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     static final String MATCH_FAILURE
         = "cannot retrieve a parse tree from a failing match";
 
-    private final ParseNodeConstructorRepository repository;
+    private final ParseNodeConstructorProvider repository;
 
-    private final SortedMap<Integer, ParseTreeBuilder> builders = new TreeMap<>();
+    private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
     /*
      * Check for success at the end of the parsing (that is, the matcher at
@@ -54,7 +53,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
      *
      * On failure, the parse tree is meaningless, so we use that to prevent the
      * user from returning a nonsensical parse tree (the build method of
-     * ParseTreeBuilder would throw an NPE anyway).
+     * ParseNodeBuilder would throw an NPE anyway).
      */
     private boolean success = false;
 
@@ -63,7 +62,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
      *
      * @param repository the parse node constructors repository.
      */
-    public ParseTreeListener(final ParseNodeConstructorRepository repository){
+    public ParseTreeBuilder(final ParseNodeConstructorProvider repository){
         this.repository = repository;
     }
 
@@ -88,7 +87,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
             return;
         }
 
-        final ParseTreeBuilder builder = new ParseTreeBuilder(constructor);
+        final ParseNodeBuilder builder = new ParseNodeBuilder(constructor);
 
         builders.put(level, builder);
     }
@@ -107,7 +106,7 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
 
         final String match = getMatch(context);
 
-        final ParseTreeBuilder builder = builders.get(level);
+        final ParseNodeBuilder builder = builders.get(level);
         builder.setMatchedText(match);
 
         /*
@@ -135,14 +134,14 @@ public final class ParseTreeListener<V> extends ParseRunnerListener<V>{
     }
 
     /**
-     * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeListener}
+     * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeBuilder}
      * This recursively builds all children, thus building a parse tree.
      *
      * @return      The root node.
      * @exception IllegalStateException Attempt to retrieve the parse tree from
      * a failed match.
      */
-    public ParseNode getRootNode(){
+    public ParseNode getTree(){
         if (!success)
             throw new IllegalStateException(MATCH_FAILURE);
         return builders.get(0).build();

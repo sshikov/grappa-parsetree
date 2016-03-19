@@ -1,7 +1,7 @@
-package com.github.chrisbrenton.grappa.parsetree.listeners;
+package com.github.chrisbrenton.grappa.parsetree.build;
 
-import com.github.chrisbrenton.grappa.parsetree.annotations.GenerateNode;
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.annotations.Label;
 import com.github.fge.grappa.parsers.BaseParser;
 import com.github.fge.grappa.rules.Rule;
@@ -33,9 +33,9 @@ import java.util.Objects;
  * an {@link IllegalStateException} is thrown.</p>
  *
  * @see ParseNode
- * @see ParseTreeListener#ParseTreeListener(ParseNodeConstructorRepository)
+ * @see ParseTreeBuilder#ParseTreeBuilder(ParseNodeConstructorProvider)
  */
-public final class ParseNodeConstructorRepository {
+public final class ParseNodeConstructorProvider {
 	@VisibleForTesting
 	static final String NO_CONSTRUCTOR
 			= "no suitable constructor found for node class %s";
@@ -51,7 +51,7 @@ public final class ParseNodeConstructorRepository {
 	 *
 	 * @param parserClass the parser class
 	 */
-	public ParseNodeConstructorRepository(final Class<? extends BaseParser<?>> parserClass) {
+	public ParseNodeConstructorProvider(final Class<? extends BaseParser<?>> parserClass) {
 
 		Objects.requireNonNull(parserClass);
 

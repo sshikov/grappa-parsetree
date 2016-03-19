@@ -1,11 +1,11 @@
-import com.github.chrisbrenton.grappa.parsetree.listeners.DummyParser;
+import com.github.chrisbrenton.grappa.parsetree.build.DelegatingParser;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
-import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
-import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
-import com.github.chrisbrenton.grappa.parsetree.visitors.VisitOrder;
-import com.github.chrisbrenton.grappa.parsetree.visitors.Visitor;
-import com.github.chrisbrenton.grappa.parsetree.visitors.VisitorRunner;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.VisitOrder;
+import com.github.chrisbrenton.grappa.parsetree.visit.Visitor;
+import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.run.ListeningParseRunner;
 
@@ -21,22 +21,22 @@ public final class Example {
 	/* The main method! */
 	public static void main(final String... args) {
 		/* The class of our parser */
-		final Class<DummyParser> parserClass = DummyParser.class;
+		final Class<DelegatingParser> parserClass = DelegatingParser.class;
 
 		/* The constructor repository for our parser */
-		final ParseNodeConstructorRepository repository
-				= new ParseNodeConstructorRepository(parserClass);
+		final ParseNodeConstructorProvider repository
+				= new ParseNodeConstructorProvider(parserClass);
 
 		/* The grappa parser! */
-		final DummyParser parser = Grappa.createParser(parserClass);
+		final DelegatingParser parser = Grappa.createParser(parserClass);
 
 		/* The runner that listens for events from the parser */
 		final ListeningParseRunner<Object> runner
 				= new ListeningParseRunner<>(parser.ruleRoot());
 
 		/* The class that will build the parse tree */
-		final ParseTreeListener<Object> listener
-				= new ParseTreeListener<>(repository);
+		final ParseTreeBuilder<Object> listener
+				= new ParseTreeBuilder<>(repository);
 
 		/* Register the parse tree builder to the runner. This must be done before you run. */
 		runner.registerListener(listener);
@@ -44,7 +44,7 @@ public final class Example {
 		runner.run("afk");
 
 		/* Get the root node of the parse tree built. */
-		final ParseNode rootNode = listener.getRootNode();
+		final ParseNode rootNode = listener.getTree();
 
 		/* Create a visitor runner, and provide the root node to start visiting from. */
 		VisitorRunner visitorRunner = new VisitorRunner(rootNode);

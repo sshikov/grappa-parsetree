@@ -1,6 +1,6 @@
-package com.github.chrisbrenton.grappa.parsetree.builders;
+package com.github.chrisbrenton.grappa.parsetree.build;
 
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
 import java.lang.reflect.Constructor;
@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
  * {@see ParseNode}
  */
 @NonFinalForTesting
-public class ParseTreeBuilder
+public class ParseNodeBuilder
 {
     private final Constructor<? extends ParseNode> constructor;
-    private final List<ParseTreeBuilder> builders = new ArrayList<>();
+    private final List<ParseNodeBuilder> builders = new ArrayList<>();
 
     private String matchedText;
 
@@ -37,13 +37,13 @@ public class ParseTreeBuilder
      *
      * @param constructor   The constructor of the node that this builder will represent.
      */
-    public ParseTreeBuilder(final Constructor<? extends ParseNode> constructor)
+    public ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
     {
         this.constructor = Objects.requireNonNull(constructor);
     }
 
 	/**
-     * Set the {@link String} matched by the node represented by this ParseTreeBuilder.
+     * Set the {@link String} matched by the node represented by this ParseNodeBuilder.
      *
      * @param match     The matched {@link String}
      */
@@ -63,18 +63,18 @@ public class ParseTreeBuilder
     }
 
 	/**
-     * Add a ParseTreeBuilder presenting a node and its children as a child of this
-     * ParseTreeBuilder.
+     * Add a ParseNodeBuilder presenting a node and its children as a child of this
+     * ParseNodeBuilder.
      *
-     * @param builder   The ParseTreeBuilder to add as a child.
+     * @param builder   The ParseNodeBuilder to add as a child.
      */
-    public void addChild(final ParseTreeBuilder builder)
+    public void addChild(final ParseNodeBuilder builder)
     {
         builders.add(Objects.requireNonNull(builder));
     }
 
 	/**
-     * Recursively build all the children of this ParseTreeBuilder, and then build the node of that
+     * Recursively build all the children of this ParseNodeBuilder, and then build the node of that
      * this builder represents. The net result of calling this method is that a ParseNode with all its
      * children is returned, and thus a ParseTree is returned.
      *
@@ -83,7 +83,7 @@ public class ParseTreeBuilder
     public ParseNode build()
     {
         final List<ParseNode> children = builders.stream()
-            .map(ParseTreeBuilder::build)
+            .map(ParseNodeBuilder::build)
             .collect(Collectors.toList());
 
         try {
@@ -97,7 +97,7 @@ public class ParseTreeBuilder
     }
 
 	/**
-     * @return A {@link String} representation of this ParseTreeBuilder.
+     * @return A {@link String} representation of this ParseNodeBuilder.
      */
     @Override
     public String toString()

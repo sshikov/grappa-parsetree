@@ -1,6 +1,6 @@
-package com.github.chrisbrenton.grappa.parsetree.visitors;
+package com.github.chrisbrenton.grappa.parsetree.visit;
 
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.google.common.collect.TreeTraverser;
 
 /**
@@ -8,7 +8,7 @@ import com.google.common.collect.TreeTraverser;
  *
  * @see VisitOrder
  */
-public final class ParseTreeTraverser
+final class ParseTreeTraverser
     extends TreeTraverser<ParseNode>
 {
     public static final TreeTraverser<ParseNode> INSTANCE

@@ -1,6 +1,6 @@
-package com.github.chrisbrenton.grappa.parsetree.visitors;
+package com.github.chrisbrenton.grappa.parsetree.visit;
 
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.google.common.eventbus.EventBus;
 
 import java.util.Objects;

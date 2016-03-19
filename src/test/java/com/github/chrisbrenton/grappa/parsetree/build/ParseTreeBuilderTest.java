@@ -1,4 +1,4 @@
-package com.github.chrisbrenton.grappa.parsetree.listeners;
+package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
 import com.github.fge.grappa.Grappa;
@@ -11,23 +11,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
 /**
- * @author Chris <chrisbrenton90@gmail.com>
+ * @author Chris <chrummyenton90@gmail.com>
  * @date 12/03/2016
  * <p>
  * <a href="www.github.com/ChrisBrenton">GitHub</a>
  */
-public class ParseTreeListenerTest {
+public class ParseTreeBuilderTest {
 
     private DummyParser parser;
-    private ParseTreeListener<Object> listener;
+    private ParseTreeBuilder<Object> listener;
 
     @BeforeMethod
     public void init() {
-        final ParseNodeConstructorRepository repository
-            = new ParseNodeConstructorRepository(DummyParser.class);
+      final ParseNodeConstructorProvider repository
+            = new ParseNodeConstructorProvider(DummyParser.class);
 
         parser = Grappa.createParser(DummyParser.class);
-        listener = new ParseTreeListener<>(repository);
+        listener = new ParseTreeBuilder<>(repository);
     }
 
     /*
@@ -49,7 +49,7 @@ public class ParseTreeListenerTest {
 
             assertThat(cause)
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage(ParseTreeListener.NO_ANNOTATION_ON_ROOT_RULE);
+                .hasMessage(ParseTreeBuilder.NO_ANNOTATION_ON_ROOT_RULE);
         }
     }
 
@@ -66,10 +66,10 @@ public class ParseTreeListenerTest {
         runner.run("");
 
         try {
-            listener.getRootNode();
+            listener.getTree();
             shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException e) {
-            assertThat(e).hasMessage(ParseTreeListener.MATCH_FAILURE);
+            assertThat(e).hasMessage(ParseTreeBuilder.MATCH_FAILURE);
         }
     }
 

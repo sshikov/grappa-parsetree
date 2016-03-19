@@ -1,4 +1,4 @@
-package com.github.chrisbrenton.grappa.parsetree.listeners;
+package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.visit.DuplicateLabelParser;
 import com.github.chrisbrenton.grappa.parsetree.visit.IllegalNode;
@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
-public final class ParseNodeConstructorRepositoryTest {
+public final class ParseNodeConstructorProviderTest {
 
 	/*
 	 * Ensures that a legal constructor is available for the {@link ParseNode} instance.
@@ -16,11 +16,11 @@ public final class ParseNodeConstructorRepositoryTest {
 	@Test
 	public void failureOnIllegalConstructor() {
 		try {
-			new ParseNodeConstructorRepository(IllegalNodeParser.class);
+			new ParseNodeConstructorProvider(IllegalNodeParser.class);
 			shouldHaveThrown(IllegalStateException.class);
 		}
 		catch (IllegalStateException e) {
-			final String msg = String.format(ParseNodeConstructorRepository.NO_CONSTRUCTOR,
+			final String msg = String.format(ParseNodeConstructorProvider.NO_CONSTRUCTOR,
 			                                 IllegalNode.class.getSimpleName());
 			assertThat(e).hasMessage(msg);
 		}
@@ -32,23 +32,23 @@ public final class ParseNodeConstructorRepositoryTest {
 	@Test
 	public void failureOnDuplicateRuleName() {
 		try {
-			new ParseNodeConstructorRepository(DuplicateLabelParser.class);
+			new ParseNodeConstructorProvider(DuplicateLabelParser.class);
 			shouldHaveThrown(IllegalStateException.class);
 		}
 		catch (IllegalStateException e) {
-			final String msg = String.format(ParseNodeConstructorRepository.DUPLICATE_NAME,
+			final String msg = String.format(ParseNodeConstructorProvider.DUPLICATE_NAME,
 			                                 "theRule");
 			assertThat(e).hasMessage(msg);
 		}
 	}
 
 	/*
-	 * Ensures that no constructor is found by the ParseNodeConstructorRepositoryTest for
+	 * Ensures that no constructor is found by the ParseNodeConstructorProviderTest for
 	 * an annotated rule that is reached that does not return a Rule.
 	 */
 	@Test
 	public void ensureNoConstructorOnVoidRule() {
-		ParseNodeConstructorRepository repo = new ParseNodeConstructorRepository(DummyParser
+		ParseNodeConstructorProvider repo = new ParseNodeConstructorProvider(DelegatingParser
 					                                                                      .class);
 		assertThat(repo.getNodeConstructor("voidRule")).isNull();
 	}
