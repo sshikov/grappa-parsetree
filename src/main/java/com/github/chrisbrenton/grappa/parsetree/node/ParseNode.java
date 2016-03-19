@@ -13,16 +13,16 @@ import java.util.Objects;
  * <p>The generated parse tree (which can be retrieved using {@link
  * ParseTreeBuilder#getTree()}) is an instance of an implementation
  * of this class. This class provides access to all of its children (using
- * {@link #getChildren()}, and allows several traversal modes; see
+ * {@link #getChildren()}), and allows several traversal modes; see
  * {@link VisitOrder} for more details. A convenience method is also provided to
  * check whether a node has children at all: {@link #hasChildren()}.</p>
  *
  * <p>Two text representations of a node can be retrieved:</p>
  *
  * <ul>
- *     <li>the full text matched (using {@link #getMatchedText()};</li>
+ *     <li>the full text matched (using {@link #getMatchedText()});</li>
  *     <li>a semantically meaningful text value for this node (using {@link
- *     #getValue()}.</li>
+ *     #getValue()}).</li>
  * </ul>
  *
  * <p>The default implementation of {@link #getValue()} is the same as that of

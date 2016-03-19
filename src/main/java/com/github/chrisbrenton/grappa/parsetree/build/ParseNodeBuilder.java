@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * {@see ParseNode}
  */
 @NonFinalForTesting
-public class ParseNodeBuilder
+class ParseNodeBuilder
 {
     private final Constructor<? extends ParseNode> constructor;
     private final List<ParseNodeBuilder> builders = new ArrayList<>();

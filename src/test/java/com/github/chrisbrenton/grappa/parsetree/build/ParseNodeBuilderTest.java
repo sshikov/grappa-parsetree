@@ -1,6 +1,7 @@
-import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
-import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeBuilder;
+package com.github.chrisbrenton.grappa.parsetree.build;
+
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
