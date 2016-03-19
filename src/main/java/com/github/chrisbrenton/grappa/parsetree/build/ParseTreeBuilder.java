@@ -129,13 +129,19 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
      */
     @Override
     public void matchFailure(final MatchFailureEvent<V> event) {
-        /* If there is an error at all, remove this builder. */
+        /*
+         * If the match is a failure, remove the builder at this level, if any.
+         *
+         * Failure to do so would mean that successful children would get
+         * attached to an invalid parent and lost at generation time...
+         */
         builders.remove(event.getContext().getLevel());
     }
 
     /**
      * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeBuilder}
-     * This recursively builds all children, thus building a parse tree.
+     *
+     * <p>This recursively builds all children, thus building a parse tree.</p>
      *
      * @return      The root node.
      * @exception IllegalStateException Attempt to retrieve the parse tree from
