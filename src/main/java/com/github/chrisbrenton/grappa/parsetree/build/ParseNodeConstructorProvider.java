@@ -59,7 +59,10 @@ public final class ParseNodeConstructorProvider {
 
 		final Set<Class<?>> classes = new HashSet<>();
 
-		for (final Class<? extends BaseParser<?>> c: ParserTraverser.INSTANCE.preOrderTraversal(parserClass))
+		final Iterable<Class<? extends BaseParser<?>>> traversal
+			= ParserTraverser.INSTANCE.preOrderTraversal(parserClass);
+
+		for (final Class<? extends BaseParser<?>> c: traversal)
 			if (classes.add(c))
                 findConstructors(c);
 	}
@@ -70,7 +73,7 @@ public final class ParseNodeConstructorProvider {
 		String ruleName;
 
 		for (final Method method : parserClass.getMethods()) {
-			constructor = getNodeConstructor(method);
+			constructor = findConstructor(method);
 			if (constructor == null)
 				continue;
 			ruleName = getRuleName(method);
@@ -97,7 +100,7 @@ public final class ParseNodeConstructorProvider {
 	}
 
 	// returns null if method is not a rule OR has no @GenerateNode annotation
-	private static Constructor<? extends ParseNode> getNodeConstructor(final Method method) {
+	private static Constructor<? extends ParseNode> findConstructor(final Method method) {
 		if (!Rule.class.isAssignableFrom(method.getReturnType()))
 			return null;
 
