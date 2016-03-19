@@ -1,6 +1,5 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
-import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
 import com.github.fge.grappa.Grappa;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,7 +20,7 @@ public class ParseTreeDelegationTest {
 
 	@BeforeMethod
 	public void init() {
-		repository = new ParseNodeConstructorProvider(DummyParser.class);
+		repository = new ParseNodeConstructorProvider(DelegatingParser.class);
 		parser = Grappa.createParser(DelegatingParser.class);
 		listener = new ParseTreeBuilder<>(repository);
 	}

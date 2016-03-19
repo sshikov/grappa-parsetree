@@ -7,13 +7,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ParserTraverser
+final class ParserTraverser
     extends TreeTraverser<Class<? extends BaseParser<?>>>
 {
+    static final ParserTraverser INSTANCE = new ParserTraverser();
+
+    private ParserTraverser() {
+    }
+
     @Override
-    public Iterable<Class<? extends BaseParser<?>>> children(
-        final Class<? extends BaseParser<?>> root)
-    {
+    public Iterable<Class<? extends BaseParser<?>>> children(final Class<? extends BaseParser<?>> root) {
         final List<Class<? extends BaseParser<?>>> ret = new ArrayList<>();
 
         final Field[] fields = root.getDeclaredFields();

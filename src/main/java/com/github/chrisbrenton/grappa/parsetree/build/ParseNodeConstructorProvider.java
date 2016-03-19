@@ -10,9 +10,11 @@ import com.google.common.annotations.VisibleForTesting;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A class to collect all constructors for parse nodes defined in a parser
@@ -55,6 +57,15 @@ public final class ParseNodeConstructorProvider {
 
 		Objects.requireNonNull(parserClass);
 
+		final Set<Class<?>> classes = new HashSet<>();
+
+		for (final Class<? extends BaseParser<?>> c: ParserTraverser.INSTANCE.preOrderTraversal(parserClass))
+			if (classes.add(c))
+                findConstructors(c);
+	}
+
+	private void findConstructors(final Class<? extends BaseParser<?>> parserClass)
+	{
 		Constructor<? extends ParseNode> constructor;
 		String ruleName;
 
@@ -75,7 +86,7 @@ public final class ParseNodeConstructorProvider {
 	 *
 	 * @return the constructor; {@code null} if not found.
 	 */
-	public Constructor<? extends ParseNode> getNodeConstructor(final String ruleName) {
+	Constructor<? extends ParseNode> getNodeConstructor(final String ruleName) {
 		return constructors.get(ruleName);
 	}
 
