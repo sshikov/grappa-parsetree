@@ -10,12 +10,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
-/**
- * @author Chris <chrummyenton90@gmail.com>
- * @date 12/03/2016
- * <p>
- * <a href="www.github.com/ChrisBrenton">GitHub</a>
- */
+
 public class ParseTreeBuilderTest {
 
     private DummyParser parser;

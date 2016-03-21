@@ -1,7 +1,7 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
-import com.github.chrisbrenton.grappa.parsetree.visit.ParentNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
 import com.github.fge.grappa.annotations.Label;
 import com.github.fge.grappa.parsers.BaseParser;
 import com.github.fge.grappa.rules.Rule;
@@ -14,7 +14,7 @@ import com.github.fge.grappa.rules.Rule;
  */
 public class DelegateParser extends BaseParser<Void> {
 
-	@GenerateNode(ParentNode.class)
+	@GenerateNode(ChildNode.class)
 	@Label("ruleTwo")
 	public Rule ruleTwo(){
 		return charRange('f','j');
