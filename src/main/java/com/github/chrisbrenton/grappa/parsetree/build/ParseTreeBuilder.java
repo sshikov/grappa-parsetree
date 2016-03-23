@@ -13,6 +13,7 @@ import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchFailureEvent;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
+import com.github.fge.grappa.support.Position;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Constructor;
@@ -218,11 +219,23 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
         }
 
         @Override
-        public synchronized String get()
+        public synchronized String getText()
         {
             if (matchText == null)
                 matchText = buffer.subSequence(start, end).toString();
             return matchText;
+        }
+
+        @Override
+        public Position getStartPosition()
+        {
+            return buffer.getPosition(start);
+        }
+
+        @Override
+        public Position getEndPosition()
+        {
+            return buffer.getPosition(end);
         }
     }
 }

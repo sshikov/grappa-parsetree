@@ -102,7 +102,7 @@ public abstract class ParseNode {
      * @return the exact text input matched by this node
      */
     public final String getMatchedText(){
-        return supplier.get();
+        return supplier.getText();
     }
 
     @Override
