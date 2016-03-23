@@ -1,6 +1,7 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.annotations.Label;
 import com.github.fge.grappa.parsers.BaseParser;
@@ -152,7 +153,7 @@ public final class ParseNodeConstructorProvider {
 		final Class<? extends ParseNode> nodeClass = ann.value();
 
 		try {
-			return nodeClass.getConstructor(String.class, List.class);
+			return nodeClass.getConstructor(MatchTextSupplier.class, List.class);
 		}
 		catch (NoSuchMethodException e) {
 			final String msg = String.format(NO_CONSTRUCTOR, nodeClass.getSimpleName());

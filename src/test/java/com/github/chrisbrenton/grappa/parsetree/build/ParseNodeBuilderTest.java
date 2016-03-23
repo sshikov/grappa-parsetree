@@ -1,5 +1,6 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
 import org.mockito.InOrder;
@@ -16,7 +17,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 public final class ParseNodeBuilderTest {
-	private static final String WHATEVER = "whatever";
+	private static final MatchTextSupplier SUPPLIER
+		= mock(MatchTextSupplier.class);
 
 	/*
 	 * The result of .build() on child builders will be mocked; we don't care
@@ -29,7 +31,7 @@ public final class ParseNodeBuilderTest {
 
 	static {
 		try {
-			CONSTRUCTOR = ChildNode.class.getConstructor(String.class, List.class);
+			CONSTRUCTOR = ChildNode.class.getConstructor(MatchTextSupplier.class, List.class);
 		}
 		catch (NoSuchMethodException e) {
 			throw new ExceptionInInitializerError(e);
@@ -55,7 +57,7 @@ public final class ParseNodeBuilderTest {
 		doReturn(childNode1).when(child1).build();
 		doReturn(childNode2).when(child2).build();
 
-		parent.setMatchedText(WHATEVER);
+		parent.setMatchTextSupplier(SUPPLIER);
 		parent.addChild(child1);
 		parent.addChild(child2);
 

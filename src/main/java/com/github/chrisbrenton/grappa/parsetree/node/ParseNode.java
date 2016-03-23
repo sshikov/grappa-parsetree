@@ -41,17 +41,16 @@ import java.util.Objects;
 public abstract class ParseNode {
 
     protected final List<ParseNode> children;
-    protected final String matchedText;
+    protected final MatchTextSupplier supplier;
 
     /**
      * Base constructor
      *
-     * @param matchedText the text matched by this node (see {@link
-     * #getMatchedText()}.
-     * @param children the children of this node.
+     * @param supplier the supplier of text matched by this node
+     * @param children the children of this node
      */
-    protected ParseNode(final String matchedText, final List<ParseNode> children){
-        this.matchedText = Objects.requireNonNull(matchedText);
+    protected ParseNode(final MatchTextSupplier supplier, final List<ParseNode> children){
+        this.supplier = Objects.requireNonNull(supplier);
         this.children = ImmutableList.copyOf(children);
     }
 
@@ -65,7 +64,7 @@ public abstract class ParseNode {
      * @return a semantically meaningful text representation of this node.
      */
     public String getValue(){
-        return matchedText;
+        return getMatchedText();
     }
 
     /**
@@ -100,7 +99,7 @@ public abstract class ParseNode {
      * @return the exact text input matched by this node
      */
     public final String getMatchedText(){
-        return matchedText;
+        return supplier.get();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
@@ -28,9 +29,9 @@ import java.util.stream.Collectors;
 class ParseNodeBuilder
 {
     private final Constructor<? extends ParseNode> constructor;
-    private final List<ParseNodeBuilder> builders = new ArrayList<>();
 
-    private String matchedText;
+    private final List<ParseNodeBuilder> builders = new ArrayList<>();
+    private MatchTextSupplier supplier;
 
 	/**
      * Constructor
@@ -42,24 +43,9 @@ class ParseNodeBuilder
         this.constructor = Objects.requireNonNull(constructor);
     }
 
-	/**
-     * Set the {@link String} matched by the node represented by this ParseNodeBuilder.
-     *
-     * @param match     The matched {@link String}
-     */
-    void setMatchedText(final String match)
+    void setMatchTextSupplier(final MatchTextSupplier supplier)
     {
-        this.matchedText = Objects.requireNonNull(match);
-    }
-
-	/**
-     * Deprecated as of 1.0.2. Use {@link #setMatchedText(String)} instead.
-     * @param match
-     */
-    @Deprecated
-    void setMatch(final String match)
-    {
-        this.matchedText = Objects.requireNonNull(match);
+        this.supplier = Objects.requireNonNull(supplier);
     }
 
 	/**
@@ -87,7 +73,7 @@ class ParseNodeBuilder
             .collect(Collectors.toList());
 
         try {
-            return constructor.newInstance(matchedText, children);
+            return constructor.newInstance(supplier, children);
         } catch (InstantiationException | IllegalAccessException
             | InvocationTargetException e) {
             String message = String.format("Unable to build an instance of class %s",

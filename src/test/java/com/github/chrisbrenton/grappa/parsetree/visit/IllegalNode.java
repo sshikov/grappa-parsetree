@@ -6,6 +6,6 @@ import java.util.Collections;
 
 public final class IllegalNode extends ParseNode {
     public IllegalNode(final String value) {
-        super(value, Collections.emptyList());
+        super(null, Collections.emptyList());
     }
 }

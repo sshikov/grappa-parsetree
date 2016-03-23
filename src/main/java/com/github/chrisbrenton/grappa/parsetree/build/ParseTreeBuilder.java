@@ -106,10 +106,10 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
         if (constructor == null)
             return;
 
-        final String match = getMatch(context);
+        final MatchTextSupplier supplier = MatchText.from(context);
 
         final ParseNodeBuilder builder = builders.get(level);
-        builder.setMatchedText(match);
+        builder.setMatchTextSupplier(supplier);
 
         /*
          * If we are back to level 0, we are done. Declare success so that the
@@ -201,7 +201,7 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
 
         private String matchText = null;
 
-        public static MatchText from(final Context<?> context)
+        private static MatchText from(final Context<?> context)
         {
             final InputBuffer buffer = context.getInputBuffer();
             final int start = context.getStartIndex();
