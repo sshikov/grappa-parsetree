@@ -7,7 +7,7 @@ import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
-import com.github.fge.grappa.run.ParseRunnerListener;
+import com.github.fge.grappa.run.ParseEventListener;
 import com.github.fge.grappa.run.ParsingResult;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchFailureEvent;
@@ -36,7 +36,7 @@ import java.util.TreeMap;
  * whether the match is a success (using {@link ParsingResult#isSuccess()})
  * before retrieving the parse tree.</p>
  */
-public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
+public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
     @VisibleForTesting
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";

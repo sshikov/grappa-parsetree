@@ -1,8 +1,10 @@
+package com.github.chrisbrenton.grappa.parsetree;
+
 import com.github.chrisbrenton.grappa.parsetree.build.DelegatingParser;
-import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
-import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitOrder;
 import com.github.chrisbrenton.grappa.parsetree.visit.Visitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
@@ -24,7 +26,7 @@ public final class Example {
 		final Class<DelegatingParser> parserClass = DelegatingParser.class;
 
 		/* The constructor repository for our parser */
-		final ParseNodeConstructor repository
+		final ParseNodeConstructorProvider repository
 				= new ParseNodeConstructorProvider(parserClass);
 
 		/* The grappa parser! */
