@@ -24,7 +24,7 @@ public final class Example {
 		final Class<DelegatingParser> parserClass = DelegatingParser.class;
 
 		/* The constructor repository for our parser */
-		final ParseNodeConstructorProvider repository
+		final ParseNodeConstructor repository
 				= new ParseNodeConstructorProvider(parserClass);
 
 		/* The grappa parser! */
