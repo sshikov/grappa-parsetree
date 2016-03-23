@@ -92,6 +92,9 @@ public abstract class ParseNode {
 	/**
 	 * Get the raw text matched by this node
      *
+     * <p>This method does in fact nothing else but calling {@code .get()} on
+     * the {@link MatchTextSupplier} instance supplied in the constructor.</p>
+     *
      * <p>As a recall, {@link #getValue()} returns the same value as this method
      * by default. Unless there is a specific need to do so, users are
      * encouraged to use {@link #getValue()} instead.</p>
