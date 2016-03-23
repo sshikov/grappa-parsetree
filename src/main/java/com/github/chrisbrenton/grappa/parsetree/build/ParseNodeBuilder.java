@@ -37,7 +37,7 @@ class ParseNodeBuilder
      *
      * @param constructor   The constructor of the node that this builder will represent.
      */
-    public ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
+    ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
     {
         this.constructor = Objects.requireNonNull(constructor);
     }
@@ -47,7 +47,7 @@ class ParseNodeBuilder
      *
      * @param match     The matched {@link String}
      */
-    public void setMatchedText(final String match)
+    void setMatchedText(final String match)
     {
         this.matchedText = Objects.requireNonNull(match);
     }
@@ -57,7 +57,7 @@ class ParseNodeBuilder
      * @param match
      */
     @Deprecated
-    public void setMatch(final String match)
+    void setMatch(final String match)
     {
         this.matchedText = Objects.requireNonNull(match);
     }
@@ -68,7 +68,7 @@ class ParseNodeBuilder
      *
      * @param builder   The ParseNodeBuilder to add as a child.
      */
-    public void addChild(final ParseNodeBuilder builder)
+    void addChild(final ParseNodeBuilder builder)
     {
         builders.add(Objects.requireNonNull(builder));
     }
@@ -80,7 +80,7 @@ class ParseNodeBuilder
      *
      * @return A {@link ParseNode}
      */
-    public ParseNode build()
+    ParseNode build()
     {
         final List<ParseNode> children = builders.stream()
             .map(ParseNodeBuilder::build)
