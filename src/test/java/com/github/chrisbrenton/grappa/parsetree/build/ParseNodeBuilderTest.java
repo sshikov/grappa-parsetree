@@ -1,6 +1,7 @@
+package com.github.chrisbrenton.grappa.parsetree.build;
+
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.chrisbrenton.grappa.parsetree.visit.ChildNode;
-import com.github.chrisbrenton.grappa.parsetree.builders.ParseTreeBuilder;
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
 import org.mockito.InOrder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public final class ParseTreeBuilderTest {
+public final class ParseNodeBuilderTest {
 	private static final String WHATEVER = "whatever";
 
 	/*
@@ -38,15 +39,15 @@ public final class ParseTreeBuilderTest {
 	private final ParseNode childNode1 = mock(ParseNode.class);
 	private final ParseNode childNode2 = mock(ParseNode.class);
 
-	private ParseTreeBuilder parent;
-	private ParseTreeBuilder child1;
-	private ParseTreeBuilder child2;
+	private ParseNodeBuilder parent;
+	private ParseNodeBuilder child1;
+	private ParseNodeBuilder child2;
 
 	@BeforeMethod
 	public void initBuilders() {
-		parent = spy(new ParseTreeBuilder(CONSTRUCTOR));
-		child1 = spy(new ParseTreeBuilder(CONSTRUCTOR));
-		child2 = spy(new ParseTreeBuilder(CONSTRUCTOR));
+		parent = spy(new ParseNodeBuilder(CONSTRUCTOR));
+		child1 = spy(new ParseNodeBuilder(CONSTRUCTOR));
+		child2 = spy(new ParseNodeBuilder(CONSTRUCTOR));
 	}
 
 	@Test

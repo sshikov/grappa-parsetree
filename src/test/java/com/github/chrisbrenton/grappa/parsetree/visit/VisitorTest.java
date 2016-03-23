@@ -1,9 +1,8 @@
 package com.github.chrisbrenton.grappa.parsetree.visit;
 
-import com.github.chrisbrenton.grappa.parsetree.listeners.ParseNodeConstructorRepository;
-import com.github.chrisbrenton.grappa.parsetree.listeners.ParseTreeListener;
-import com.github.chrisbrenton.grappa.parsetree.nodes.ParseNode;
-import com.github.chrisbrenton.grappa.parsetree.visitors.VisitorRunner;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
+import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.run.ListeningParseRunner;
 import com.github.fge.grappa.run.ParsingResult;
@@ -19,16 +18,16 @@ import static org.mockito.Mockito.times;
 
 public final class VisitorTest {
 	private DummyParser parser;
-	private ParseTreeListener<Void> listener;
+	private ParseTreeBuilder<Void> listener;
 
 	@BeforeMethod
 	public void init() {
 		final Class<DummyParser> parserClass = DummyParser.class;
-		final ParseNodeConstructorRepository repository
-				= new ParseNodeConstructorRepository(parserClass);
+		final ParseNodeConstructorProvider provider
+				= new ParseNodeConstructorProvider(parserClass);
 
 		parser = Grappa.createParser(parserClass);
-		listener = new ParseTreeListener<>(repository);
+		listener = new ParseTreeBuilder<>(provider);
 	}
 
 	/*
@@ -46,7 +45,7 @@ public final class VisitorTest {
 
 		assertThat(result.isSuccess()).isTrue();
 
-		final ParseNode node = listener.getRootNode();
+		final ParseNode node = listener.getTree();
 
 		assertThat(node).isInstanceOf(ParentNode.class);
 
