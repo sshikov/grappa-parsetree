@@ -1,7 +1,9 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
@@ -188,5 +190,39 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
             return null;
 
         return repository.getNodeConstructor(matcher.getLabel());
+    }
+
+    private static final class MatchText
+        implements MatchTextSupplier
+    {
+        private final InputBuffer buffer;
+        private final int start;
+        private final int end;
+
+        private String matchText = null;
+
+        public static MatchText from(final Context<?> context)
+        {
+            final InputBuffer buffer = context.getInputBuffer();
+            final int start = context.getStartIndex();
+            final int end = context.getCurrentIndex();
+            return new MatchText(buffer, start, end);
+        }
+
+        private MatchText(final InputBuffer buffer, final int start,
+            final int end)
+        {
+            this.buffer = buffer;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public synchronized String get()
+        {
+            if (matchText == null)
+                matchText = buffer.subSequence(start, end).toString();
+            return matchText;
+        }
     }
 }
