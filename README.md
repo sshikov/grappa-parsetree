@@ -14,7 +14,8 @@ grammars you define.
 
 ## Using grappa-parsetree
 [Example.java](https://github.com/ChrisBrenton/grappa-parsetree/blob/master/src/test/java/Example.java)
-has a working example of how to use this library. It does not perform any specific tasks, however.
+has a working example of how to use this library. It does not perform any specific tasks, however
+. There is also a more complex example in the testing directory.
 
 ## Adding To Your Project
 Adding this library to your project is simple:
