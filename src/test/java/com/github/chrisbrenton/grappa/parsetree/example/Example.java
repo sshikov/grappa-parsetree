@@ -3,7 +3,6 @@ package com.github.chrisbrenton.grappa.parsetree.example;
 import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
 import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
-import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitOrder;
 import com.github.chrisbrenton.grappa.parsetree.visit.Visitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
@@ -51,7 +50,7 @@ public final class Example {
 		VisitorRunner visitorRunner = new VisitorRunner(rootNode);
 
 		/* Create a visitor */
-		Visitor v = new DummyVisitor();
+		ExampleVisitor v = new ExampleVisitor();
 
 		/* Register your visitor. */
 		visitorRunner.registerVisitor(v);
@@ -62,6 +61,6 @@ public final class Example {
 		visitorRunner.run(VisitOrder.PREORDER);
 
 		/* Done! */
-		System.out.println("Done!");
+		System.out.println(v.getSillySentence());
 	}
 }
