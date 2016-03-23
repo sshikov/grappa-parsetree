@@ -2,7 +2,8 @@
 
 The license of this project is Apache 2.0.
 
-The latest version of this is in progress. It requires Java 8 or later.
+The latest version of this is 1.0.1, although 1.1.0-beta.1 is also available. It requires Java 8
+ or later.
 
 ## What Is This?
 
