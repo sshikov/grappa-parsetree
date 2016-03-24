@@ -46,7 +46,7 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
     static final String MATCH_FAILURE
         = "cannot retrieve a parse tree from a failing match";
 
-    private final ParseNodeConstructorProvider repository;
+    private final ParseNodeConstructorProvider provider;
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
@@ -63,10 +63,10 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
     /**
      * Constructor.
      *
-     * @param repository the parse node constructors repository.
+     * @param provider the parse node constructors provider.
      */
-    public ParseTreeBuilder(final ParseNodeConstructorProvider repository){
-        this.repository = repository;
+    public ParseTreeBuilder(final ParseNodeConstructorProvider provider){
+        this.provider = provider;
     }
 
 	/**
@@ -190,7 +190,7 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
         if (matcher.getType() == MatcherType.ACTION)
             return null;
 
-        return repository.getNodeConstructor(matcher.getLabel());
+        return provider.getNodeConstructor(matcher.getLabel());
     }
 
     private static final class MatchText
