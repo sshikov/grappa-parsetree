@@ -10,12 +10,43 @@ import com.github.fge.grappa.run.ParseRunner;
 
 import java.util.Objects;
 
+/**
+ * Parse tree factory
+ *
+ * <p>Usage:</p>
+ *
+ * <pre>
+ *     final ParseTree&lt;MyNode&gt; parseTree = ParseTree
+ *         .usingParser(MyParser.class)
+ *         .withRule(MyParser::theRule)
+ *         .withRoot(MyNode.class);
+ * </pre>
+ *
+ * <p>You can then use this class to generate parse trees from inputs, all of
+ * which must implement {@link CharSequence}, with:</p>
+ *
+ * <pre>
+ *     final MyNode node = parseTree.parse(someInput)
+ * </pre>
+ *
+ * <p>Please note that {@link String} implements {@code CharSequence}.</p>
+ *
+ * @param <N> type parameter for the root node of the generated tree
+ */
 public final class ParseTree<N extends ParseNode>
 {
     private final Rule rule;
     private final ParseNodeConstructorProvider provider;
     private final Class<N> nodeClass;
 
+    /**
+     * Bootstrap method
+     *
+     * @param parserClass the parser class
+     * @param <T> parameter type of the elements of the parser's stack values
+     * @param <P> parameter type of the parser class
+     * @return a {@link ParseTreeBootstrap}
+     */
     public static <T, P extends BaseParser<T>> ParseTreeBootstrap<T, P>
         usingParser(final Class<P> parserClass)
     {

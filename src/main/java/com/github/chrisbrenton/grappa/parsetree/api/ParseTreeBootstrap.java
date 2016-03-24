@@ -9,6 +9,16 @@ import com.github.fge.grappa.rules.Rule;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * The first step involved in building a {@link ParseTree} instance
+ *
+ * <p>An instance of this class is created using {@link
+ * ParseTree#usingParser(Class)}. Its only method, {@link #withRule(Function)},
+ * yields an instance of a {@link ParseTreeRule} for method chaining.</p>
+ *
+ * @param <T> type parameter of the elements of the parser class
+ * @param <P> type parameter of the parser
+ */
 public final class ParseTreeBootstrap<T, P extends BaseParser<T>>
 {
     private final P parser;
