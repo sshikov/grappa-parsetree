@@ -21,7 +21,7 @@ public final class ParseTreeRule<T, P extends BaseParser<T>>
         this.provider = provider;
     }
 
-    public <N extends ParseNode> ParseTree<T, N> withRoot(final Class<N> nodeClass)
+    public <N extends ParseNode> ParseTree<N> withRoot(final Class<N> nodeClass)
     {
         Objects.requireNonNull(nodeClass);
         return new ParseTree<>(rule, provider, nodeClass);

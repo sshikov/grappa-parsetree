@@ -10,7 +10,7 @@ import com.github.fge.grappa.run.ParseRunner;
 
 import java.util.Objects;
 
-public final class ParseTree<T, N extends ParseNode>
+public final class ParseTree<N extends ParseNode>
 {
     private final Rule rule;
     private final ParseNodeConstructorProvider provider;
@@ -31,11 +31,22 @@ public final class ParseTree<T, N extends ParseNode>
         this.nodeClass = nodeClass;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public N parse(final CharSequence input)
     {
-        final ParseRunner<T> runner = new ParseRunner<>(rule);
+        /*
+         * OK, this is ugly.
+         *
+         * We don't care about the type of values stored in the stack in this
+         * scenario. Which means we must use raw type invocations of our runners
+         * and event listeners.
+         *
+         * This works in practice, but... Well... We have to @SuppressWarnings
+         * a lot :(
+         */
+        final ParseRunner runner = new ParseRunner(rule);
 
-        final ParseTreeBuilder<T> builder = new ParseTreeBuilder<>(provider);
+        final ParseTreeBuilder builder = new ParseTreeBuilder(provider);
 
         runner.registerListener(builder);
 

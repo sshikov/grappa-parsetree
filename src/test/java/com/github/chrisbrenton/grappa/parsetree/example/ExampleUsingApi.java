@@ -16,7 +16,7 @@ public final class ExampleUsingApi
 
 	/* The main method! */
 	public static void main(final String... args) {
-		final ParseTree<Void, SentenceNode> parseTree = ParseTree
+		final ParseTree<SentenceNode> parseTree = ParseTree
 			.usingParser(SentenceParser.class)
 			.withRule(SentenceParser::sentence)
 			.withRoot(SentenceNode.class);
