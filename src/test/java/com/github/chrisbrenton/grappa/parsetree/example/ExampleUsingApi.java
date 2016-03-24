@@ -7,10 +7,10 @@ import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
 /**
  * This is an example of how you might use grappa-parsetree
  */
-public final class Example2
+public final class ExampleUsingApi
 {
 	/* Do not attempt to create an instance of this class! */
-	private Example2() {
+	private ExampleUsingApi() {
 		throw new Error("no instantiation is permitted");
 	}
 
