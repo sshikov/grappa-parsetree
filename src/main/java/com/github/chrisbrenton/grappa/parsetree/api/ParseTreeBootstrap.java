@@ -6,6 +6,7 @@ import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.parsers.BaseParser;
 import com.github.fge.grappa.rules.Rule;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public final class ParseTreeBootstrap<T, P extends BaseParser<T>>
@@ -21,6 +22,7 @@ public final class ParseTreeBootstrap<T, P extends BaseParser<T>>
 
     public ParseTreeRule<T, P> withRule(final Function<? super P, Rule> fn)
     {
+        Objects.requireNonNull(fn);
         return new ParseTreeRule<>(parser, provider, fn);
     }
 }
