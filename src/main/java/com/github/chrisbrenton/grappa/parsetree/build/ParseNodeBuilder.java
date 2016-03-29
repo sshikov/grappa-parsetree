@@ -1,5 +1,6 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.internal.NonFinalForTesting;
 
@@ -28,38 +29,23 @@ import java.util.stream.Collectors;
 class ParseNodeBuilder
 {
     private final Constructor<? extends ParseNode> constructor;
-    private final List<ParseNodeBuilder> builders = new ArrayList<>();
 
-    private String matchedText;
+    private final List<ParseNodeBuilder> builders = new ArrayList<>();
+    private MatchTextSupplier supplier;
 
 	/**
      * Constructor
      *
      * @param constructor   The constructor of the node that this builder will represent.
      */
-    public ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
+    ParseNodeBuilder(final Constructor<? extends ParseNode> constructor)
     {
         this.constructor = Objects.requireNonNull(constructor);
     }
 
-	/**
-     * Set the {@link String} matched by the node represented by this ParseNodeBuilder.
-     *
-     * @param match     The matched {@link String}
-     */
-    public void setMatchedText(final String match)
+    void setMatchTextSupplier(final MatchTextSupplier supplier)
     {
-        this.matchedText = Objects.requireNonNull(match);
-    }
-
-	/**
-     * Deprecated as of 1.0.2. Use {@link #setMatchedText(String)} instead.
-     * @param match
-     */
-    @Deprecated
-    public void setMatch(final String match)
-    {
-        this.matchedText = Objects.requireNonNull(match);
+        this.supplier = Objects.requireNonNull(supplier);
     }
 
 	/**
@@ -68,7 +54,7 @@ class ParseNodeBuilder
      *
      * @param builder   The ParseNodeBuilder to add as a child.
      */
-    public void addChild(final ParseNodeBuilder builder)
+    void addChild(final ParseNodeBuilder builder)
     {
         builders.add(Objects.requireNonNull(builder));
     }
@@ -80,14 +66,14 @@ class ParseNodeBuilder
      *
      * @return A {@link ParseNode}
      */
-    public ParseNode build()
+    ParseNode build()
     {
         final List<ParseNode> children = builders.stream()
             .map(ParseNodeBuilder::build)
             .collect(Collectors.toList());
 
         try {
-            return constructor.newInstance(matchedText, children);
+            return constructor.newInstance(supplier, children);
         } catch (InstantiationException | IllegalAccessException
             | InvocationTargetException e) {
             String message = String.format("Unable to build an instance of class %s",

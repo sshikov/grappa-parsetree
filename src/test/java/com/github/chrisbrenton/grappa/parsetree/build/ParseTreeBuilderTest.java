@@ -3,7 +3,7 @@ package com.github.chrisbrenton.grappa.parsetree.build;
 import com.github.chrisbrenton.grappa.parsetree.visit.DummyParser;
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.exceptions.GrappaException;
-import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParseRunner;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,8 +31,8 @@ public class ParseTreeBuilderTest {
      */
     @Test
     public void failIfRootRuleIsNotAnnotated() {
-        final ListeningParseRunner<Object> runner
-            = new ListeningParseRunner<>(parser.noAnnotation());
+        final ParseRunner<Object> runner
+            = new ParseRunner<>(parser.noAnnotation());
 
         runner.registerListener(listener);
 
@@ -53,8 +53,8 @@ public class ParseTreeBuilderTest {
      */
     @Test
     public void failToRetrieveParseTreeOnParseFailure() {
-        final ListeningParseRunner<Object> runner
-            = new ListeningParseRunner<>(parser.failingRule());
+        final ParseRunner<Object> runner
+            = new ParseRunner<>(parser.failingRule());
 
         runner.registerListener(listener);
 

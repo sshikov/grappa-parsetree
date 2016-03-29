@@ -2,8 +2,7 @@
 
 The license of this project is Apache 2.0.
 
-The latest version of this is 1.0.1, although 1.1.0-beta.1 is also available. It requires Java 8
- or later.
+The latest version of grappa-parsetree is 1.0.1, although 1.1.0-beta.2 is also available. It requires Java 8 or later.
 
 ## What Is This?
 
@@ -15,7 +14,8 @@ grammars you define.
 
 ## Using grappa-parsetree
 [Example.java](https://github.com/ChrisBrenton/grappa-parsetree/blob/master/src/test/java/Example.java)
-has a working example of how to use this library. It does not perform any specific tasks, however.
+has a working example of how to use this library. It does not perform any specific tasks, however
+. There is also a more complex example in the testing directory.
 
 ## Adding To Your Project
 Adding this library to your project is simple:

@@ -1,13 +1,15 @@
+package com.github.chrisbrenton.grappa.parsetree;
+
 import com.github.chrisbrenton.grappa.parsetree.build.DelegatingParser;
-import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
-import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.chrisbrenton.grappa.parsetree.visit.DummyVisitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitOrder;
 import com.github.chrisbrenton.grappa.parsetree.visit.Visitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
 import com.github.fge.grappa.Grappa;
-import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParseRunner;
 
 /**
  * This is an example of how you might use grappa-parsetree
@@ -23,20 +25,18 @@ public final class Example {
 		/* The class of our parser */
 		final Class<DelegatingParser> parserClass = DelegatingParser.class;
 
-		/* The constructor repository for our parser */
-		final ParseNodeConstructorProvider repository
+		final ParseNodeConstructorProvider provider
 				= new ParseNodeConstructorProvider(parserClass);
 
 		/* The grappa parser! */
 		final DelegatingParser parser = Grappa.createParser(parserClass);
 
 		/* The runner that listens for events from the parser */
-		final ListeningParseRunner<Object> runner
-				= new ListeningParseRunner<>(parser.ruleRoot());
+		final ParseRunner<Object> runner = new ParseRunner<>(parser.ruleRoot());
 
 		/* The class that will build the parse tree */
 		final ParseTreeBuilder<Object> listener
-				= new ParseTreeBuilder<>(repository);
+				= new ParseTreeBuilder<>(provider);
 
 		/* Register the parse tree builder to the runner. This must be done before you run. */
 		runner.registerListener(listener);

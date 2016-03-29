@@ -4,7 +4,7 @@ import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvid
 import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.Grappa;
-import com.github.fge.grappa.run.ListeningParseRunner;
+import com.github.fge.grappa.run.ParseRunner;
 import com.github.fge.grappa.run.ParsingResult;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -36,8 +36,8 @@ public final class VisitorTest {
 	 */
 	@Test
 	public void visitOrderTest() {
-		final ListeningParseRunner<Void> runner
-				= new ListeningParseRunner<>(parser.parent());
+		final ParseRunner<Void> runner
+				= new ParseRunner<>(parser.parent());
 
 		runner.registerListener(listener);
 

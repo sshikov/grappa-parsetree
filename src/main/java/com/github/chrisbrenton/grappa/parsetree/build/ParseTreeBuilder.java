@@ -1,16 +1,19 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.GenerateNode;
+import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.matchers.MatcherType;
 import com.github.fge.grappa.matchers.base.Matcher;
-import com.github.fge.grappa.run.ParseRunnerListener;
+import com.github.fge.grappa.run.ParseEventListener;
 import com.github.fge.grappa.run.ParsingResult;
 import com.github.fge.grappa.run.context.Context;
 import com.github.fge.grappa.run.events.MatchFailureEvent;
 import com.github.fge.grappa.run.events.MatchSuccessEvent;
 import com.github.fge.grappa.run.events.PreMatchEvent;
+import com.github.fge.grappa.support.Position;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.lang.reflect.Constructor;
@@ -34,7 +37,7 @@ import java.util.TreeMap;
  * whether the match is a success (using {@link ParsingResult#isSuccess()})
  * before retrieving the parse tree.</p>
  */
-public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
+public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
     @VisibleForTesting
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";
@@ -43,7 +46,7 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
     static final String MATCH_FAILURE
         = "cannot retrieve a parse tree from a failing match";
 
-    private final ParseNodeConstructorProvider repository;
+    private final ParseNodeConstructorProvider provider;
 
     private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
 
@@ -60,10 +63,10 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
     /**
      * Constructor.
      *
-     * @param repository the parse node constructors repository.
+     * @param provider the parse node constructors provider.
      */
-    public ParseTreeBuilder(final ParseNodeConstructorProvider repository){
-        this.repository = repository;
+    public ParseTreeBuilder(final ParseNodeConstructorProvider provider){
+        this.provider = provider;
     }
 
 	/**
@@ -104,10 +107,10 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
         if (constructor == null)
             return;
 
-        final String match = getMatch(context);
+        final MatchTextSupplier supplier = MatchText.from(context);
 
         final ParseNodeBuilder builder = builders.get(level);
-        builder.setMatchedText(match);
+        builder.setMatchTextSupplier(supplier);
 
         /*
          * If we are back to level 0, we are done. Declare success so that the
@@ -187,6 +190,52 @@ public final class ParseTreeBuilder<V> extends ParseRunnerListener<V>{
         if (matcher.getType() == MatcherType.ACTION)
             return null;
 
-        return repository.getNodeConstructor(matcher.getLabel());
+        return provider.getNodeConstructor(matcher.getLabel());
+    }
+
+    private static final class MatchText
+        implements MatchTextSupplier
+    {
+        private final InputBuffer buffer;
+        private final int start;
+        private final int end;
+
+        private String matchText = null;
+
+        private static MatchText from(final Context<?> context)
+        {
+            final InputBuffer buffer = context.getInputBuffer();
+            final int start = context.getStartIndex();
+            final int end = context.getCurrentIndex();
+            return new MatchText(buffer, start, end);
+        }
+
+        private MatchText(final InputBuffer buffer, final int start,
+            final int end)
+        {
+            this.buffer = buffer;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public synchronized String getText()
+        {
+            if (matchText == null)
+                matchText = buffer.subSequence(start, end).toString();
+            return matchText;
+        }
+
+        @Override
+        public Position getStartPosition()
+        {
+            return buffer.getPosition(start);
+        }
+
+        @Override
+        public Position getEndPosition()
+        {
+            return buffer.getPosition(end);
+        }
     }
 }

@@ -6,12 +6,6 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Chris <chrisbrenton90@gmail.com>
- * @date 19/03/2016
- * <p>
- * <a href="www.github.com/ChrisBrenton">GitHub</a>
- */
 public class ParseTreeDelegationTest {
 
 	private DelegatingParser parser;
