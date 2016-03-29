@@ -4,7 +4,6 @@ import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvid
 import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitOrder;
-import com.github.chrisbrenton.grappa.parsetree.visit.Visitor;
 import com.github.chrisbrenton.grappa.parsetree.visit.VisitorRunner;
 import com.github.fge.grappa.Grappa;
 import com.github.fge.grappa.run.ParseRunner;
