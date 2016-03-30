@@ -1,7 +1,6 @@
 package com.github.chrisbrenton.grappa.parsetree.node;
 
-import com.github.chrisbrenton.grappa.parsetree.build
-	.ParseNodeConstructorProvider;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
 import com.github.fge.grappa.rules.Rule;
 
 import java.lang.annotation.ElementType;
@@ -21,3 +20,4 @@ import java.lang.annotation.Target;
 public @interface GenerateNode {
 	Class<? extends ParseNode> value();
 }
+

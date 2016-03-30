@@ -13,7 +13,7 @@ This project provides a mechanism for building a [Parse Tree](https://en.wikiped
 grammars you define.
 
 ## Using grappa-parsetree
-[Example.java](https://github.com/ChrisBrenton/grappa-parsetree/blob/master/src/test/java/Example.java)
+[Example.java](https://github.com/ChrisBrenton/grappa-parsetree/blob/master/src/test/java/com/github/chrisbrenton/grappa/parsetree/example/Example.java)
 has a working example of how to use this library. It does not perform any specific tasks, however
 . There is also a more complex example in the testing directory.
 
