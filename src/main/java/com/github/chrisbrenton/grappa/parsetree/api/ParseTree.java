@@ -62,18 +62,19 @@ public final class ParseTree<N extends ParseNode>
         this.nodeClass = nodeClass;
     }
 
+	/**
+     * Produce a parse tree from a given input.
+     *
+     * @param input The text to be parsed.
+     * @return  The ParseNode that is found at the root of the Parse Tree.
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public N parse(final CharSequence input)
     {
         /*
-         * OK, this is ugly.
-         *
          * We don't care about the type of values stored in the stack in this
          * scenario. Which means we must use raw type invocations of our runners
          * and event listeners.
-         *
-         * This works in practice, but... Well... We have to @SuppressWarnings
-         * a lot :(
          */
         final ParseRunner runner = new ParseRunner(rule);
 
