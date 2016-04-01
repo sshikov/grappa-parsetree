@@ -24,7 +24,7 @@ public final class SimpleCalculator
 	public static void main(final String... args) {
 		final ParseTree<ExpressionNode> parseTree = ParseTree
 			.usingParser(SimpleExpressionParser.class)
-			.withRule(SimpleExpressionParser::input)
+			.withRule(SimpleExpressionParser::expression)
 			.withRoot(ExpressionNode.class);
 
         final Scanner scanner = new Scanner(System.in);
