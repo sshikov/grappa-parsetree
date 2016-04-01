@@ -6,6 +6,8 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The basic class for a parse node of a generated parse tree
@@ -87,6 +89,19 @@ public abstract class ParseNode {
     public final List<ParseNode> getChildren() {
         // This is an ImmutableList; no risk of it being modified by the user
         return children;
+    }
+
+	/**
+     * Return a stream of nodes.
+     *
+     * @param order The order in which the stream should produce nodes.
+     * @return      A stream of this node and all its children in the specified order.
+     *
+     * @see com.google.common.collect.TreeTraverser
+     */
+    public Stream<ParseNode> stream(final VisitOrder order) {
+        Objects.requireNonNull(order);
+        return StreamSupport.stream(order.visit(this).spliterator(), false);
     }
 
 	/**
