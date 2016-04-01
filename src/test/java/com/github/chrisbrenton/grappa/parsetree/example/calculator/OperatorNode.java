@@ -21,7 +21,7 @@ public final class OperatorNode
     @Override
     public BigDecimal apply(final BigDecimal t, final BigDecimal u)
     {
-        switch (getMatchedText()) {
+        switch (getMatchedText().trim()) {
             case "+":
                 return t.add(u);
             case "-":

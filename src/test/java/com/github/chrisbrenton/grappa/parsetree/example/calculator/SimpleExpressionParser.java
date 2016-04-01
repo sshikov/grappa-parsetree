@@ -19,6 +19,35 @@ public class SimpleExpressionParser
         return anyOf("+-*/");
     }
 
+    @GenerateNode(OperatorNode.class)
+    public Rule mult()
+    {
+        return operator('*');
+    }
+
+    @GenerateNode(OperatorNode.class)
+    public Rule divide()
+    {
+        return operator('/');
+    }
+
+    @GenerateNode(OperatorNode.class)
+    public Rule plus()
+    {
+        return operator('+');
+    }
+
+    @GenerateNode(OperatorNode.class)
+    public Rule minus()
+    {
+        return operator('-');
+    }
+
+    Rule operator(final char c)
+    {
+        return sequence(zeroOrMore(wsp()), c, zeroOrMore(wsp()));
+    }
+
     public Rule operand()
     {
         return firstOf(
@@ -36,9 +65,13 @@ public class SimpleExpressionParser
     @GenerateNode(ExpressionNode.class)
     public Rule expression()
     {
-        return join(operand())
-            .using(zeroOrMore(wsp()), operator(), zeroOrMore(wsp()))
-            .min(1);
+        return firstOf(
+            sequence(operand(), mult(), expression()),
+            sequence(operand(), divide(), expression()),
+            sequence(operand(), plus(), expression()),
+            sequence(operand(), minus(), expression()),
+            operand()
+        );
     }
 
     @GenerateNode(ExpressionNode.class)
