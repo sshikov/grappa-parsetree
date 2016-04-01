@@ -41,6 +41,7 @@ public class SimpleExpressionParser
             .min(1);
     }
 
+    @GenerateNode(ExpressionNode.class)
     public Rule input()
     {
         return sequence(expression(), EOI);
