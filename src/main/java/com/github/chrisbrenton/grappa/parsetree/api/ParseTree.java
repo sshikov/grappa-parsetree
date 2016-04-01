@@ -82,7 +82,7 @@ public final class ParseTree<N extends ParseNode>
         runner.registerListener(builder);
 
         if (!runner.run(input).isSuccess())
-            throw new GrappaException("parsing failed! Cannot retrieve the tree");
+            throw new GrappaException("Parsing failed! Cannot retrieve the tree");
 
         return nodeClass.cast(builder.getTree());
     }
