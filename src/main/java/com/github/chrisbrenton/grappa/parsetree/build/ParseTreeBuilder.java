@@ -58,7 +58,7 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
      * user from returning a nonsensical parse tree (the build method of
      * ParseNodeBuilder would throw an NPE anyway).
      */
-    private boolean success = false;
+    private ParseNode rootNode = null;
 
     /**
      * Constructor.
@@ -109,19 +109,18 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
 
         final MatchTextSupplier supplier = MatchText.from(context);
 
-        final ParseNodeBuilder builder = builders.get(level);
+        final ParseNodeBuilder builder = builders.remove(level);
         builder.setMatchTextSupplier(supplier);
 
         /*
-         * If we are back to level 0, we are done. Declare success so that the
-         * user can retrieve the parse tree.
+         * If we are back to level 0, we are done. Build the tree.
          */
         if (level == 0) {
-            success = true;
+            rootNode = builder.build();
             return;
         }
 
-        final int previousLevel = builders.headMap(level).lastKey();
+        final int previousLevel = builders.lastKey();
 
         builders.get(previousLevel).addChild(builder);
     }
@@ -151,9 +150,9 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
      * a failed match.
      */
     public ParseNode getTree(){
-        if (!success)
+        if (rootNode == null)
             throw new IllegalStateException(MATCH_FAILURE);
-        return builders.get(0).build();
+        return rootNode;
     }
 
 	/**
