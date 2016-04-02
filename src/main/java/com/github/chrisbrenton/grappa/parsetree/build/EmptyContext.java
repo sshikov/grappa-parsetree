@@ -1,10 +1,11 @@
 package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
-import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+
+import java.util.function.Supplier;
 
 enum EmptyContext
-    implements ParseTreeContext
+    implements ParseTreeContext, Supplier<ParseTreeContext>
 {
     INSTANCE,
     ;
@@ -17,5 +18,11 @@ enum EmptyContext
     @Override
     public void setMatch(final MatchTextSupplier supplier)
     {
+    }
+
+    @Override
+    public ParseTreeContext get()
+    {
+        return this;
     }
 }
