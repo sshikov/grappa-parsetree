@@ -1,7 +1,7 @@
 package com.github.chrisbrenton.grappa.parsetree.api;
 
 import com.github.chrisbrenton.grappa.parsetree.build.ParseNodeConstructorProvider;
-import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder2;
+import com.github.chrisbrenton.grappa.parsetree.build.ParseTreeBuilder;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.exceptions.GrappaException;
 import com.github.fge.grappa.parsers.BaseParser;
@@ -78,7 +78,7 @@ public final class ParseTree<N extends ParseNode>
          */
         final ParseRunner runner = new ParseRunner(rule);
 
-        final ParseTreeBuilder2 builder = new ParseTreeBuilder2(provider);
+        final ParseTreeBuilder builder = new ParseTreeBuilder(provider);
 
         runner.registerListener(builder);
 

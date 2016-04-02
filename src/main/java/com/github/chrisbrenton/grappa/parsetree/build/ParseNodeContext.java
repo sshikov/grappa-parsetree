@@ -2,6 +2,7 @@ package com.github.chrisbrenton.grappa.parsetree.build;
 
 import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
+import com.github.fge.grappa.parsers.BaseParser;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -9,6 +10,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
+/**
+ * A parse tree context with an attached parse node
+ *
+ * <p><strong>FIXME: hack!</strong> The constructor has to be aware as to
+ * whether the matcher associated with this node is a {@linkplain
+ * BaseParser#join(Object) join matcher}. The reason is that children are, at
+ * the moment, added unconditionally to the parent on success. But if it is a
+ * join matcher, the number of nodes we can generate MUST be odd.</p>
+ */
 final class ParseNodeContext
     implements ParseTreeContext
 {
