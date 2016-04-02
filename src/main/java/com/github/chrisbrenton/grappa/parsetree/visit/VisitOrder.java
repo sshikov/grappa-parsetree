@@ -1,8 +1,9 @@
 package com.github.chrisbrenton.grappa.parsetree.visit;
 
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
-import com.google.common.base.Function;
 import com.google.common.collect.TreeTraverser;
+
+import java.util.function.Function;
 
 /**
  * Determine which order we want to use when traversing a parse tree
