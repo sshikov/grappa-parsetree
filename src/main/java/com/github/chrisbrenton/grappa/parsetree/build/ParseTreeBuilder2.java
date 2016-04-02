@@ -65,9 +65,9 @@ public final class ParseTreeBuilder2<V> extends ParseEventListener<V>
     public void beforeMatch(final PreMatchEvent<V> event){
         final Context<V> context = event.getContext();
         final int level = context.getLevel();
-        final ParseTreeContext ctx = level == 0
-            ? factory.createRootContext(context)
-            : factory.createContext(context);
+        final ParseTreeContext ctx = factory.createContext(context);
+        if (level == 0 && !ctx.hasNode())
+            throw new IllegalStateException(NO_ANNOTATION_ON_ROOT_RULE);
         parseTreeContexts.put(level, ctx);
     }
 

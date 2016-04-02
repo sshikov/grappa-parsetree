@@ -12,6 +12,11 @@ interface ParseTreeContext
 
     void setMatch(final MatchTextSupplier supplier);
 
+    default boolean hasNode()
+    {
+        return false;
+    }
+
     default ParseNode build()
     {
         throw new IllegalStateException();

@@ -13,26 +13,11 @@ import java.lang.reflect.Constructor;
 @NonFinalForTesting
 class ParseTreeContextFactory
 {
-    @VisibleForTesting
-    static final String NO_ANNOTATION_ON_ROOT_RULE
-        = "root rule has no @GenerateNode annotation";
-
     private final ParseNodeConstructorProvider provider;
 
     ParseTreeContextFactory(final ParseNodeConstructorProvider provider)
     {
         this.provider = provider;
-    }
-
-    ParseTreeContext createRootContext(final Context<?> context)
-    {
-        final Constructor<? extends ParseNode> constructor
-            = findConstructor(context);
-
-        if (constructor == null)
-            throw new IllegalArgumentException(NO_ANNOTATION_ON_ROOT_RULE);
-
-        return new ParseNodeContext(constructor);
     }
 
     ParseTreeContext createContext(final Context<?> context)

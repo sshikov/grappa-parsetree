@@ -30,6 +30,12 @@ final class ParseNodeContext
     }
 
     @Override
+    public boolean hasNode()
+    {
+        return true;
+    }
+
+    @Override
     public ParseNode build()
     {
         return builder.build();
