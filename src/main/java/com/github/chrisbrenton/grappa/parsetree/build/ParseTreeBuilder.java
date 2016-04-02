@@ -5,8 +5,6 @@ import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.buffers.InputBuffer;
 import com.github.fge.grappa.exceptions.GrappaException;
-import com.github.fge.grappa.matchers.MatcherType;
-import com.github.fge.grappa.matchers.base.Matcher;
 import com.github.fge.grappa.run.ParseEventListener;
 import com.github.fge.grappa.run.ParsingResult;
 import com.github.fge.grappa.run.context.Context;
@@ -16,16 +14,15 @@ import com.github.fge.grappa.run.events.PreMatchEvent;
 import com.github.fge.grappa.support.Position;
 import com.google.common.annotations.VisibleForTesting;
 
-import java.lang.reflect.Constructor;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
- * Parse runner listener used to build a parse tree
+ * Parse event listener used to build a parse tree
  *
- * <p>This listener will create {@link ParseNodeBuilder} instances (for rules
- * annotated with {@link GenerateNode} only) and build the parse tree when the
- * user calls {@link #getTree()}.</p>
+ * <p>This listener is in charge of listening for all events and build the parse
+ * tree when the user calls {@link #getTree()}. Only rules annotated with {@link
+ * GenerateNode} will trigger the build of parse nodes.</p>
  *
  * <p>It is required that the root rule have such an annotation (it would be
  * impossible to build a parse tree otherwise); if this is not the case, an
@@ -33,11 +30,12 @@ import java.util.TreeMap;
  * GrappaException}).</p>
  *
  * <p>An attempt to retrieve a parse tree of a failed match will throw
- * an {@link IllegalStateException} as well. To prevent this, any usage of this class should check
- * whether the match is a success (using {@link ParsingResult#isSuccess()})
- * before retrieving the parse tree.</p>
+ * an {@link IllegalStateException} as well. To prevent this, any usage of this
+ * class should check whether the match is a success (using {@link
+ * ParsingResult#isSuccess()}) before retrieving the parse tree.</p>
  */
-public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
+public final class ParseTreeBuilder<V> extends ParseEventListener<V>
+{
     @VisibleForTesting
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";
@@ -46,137 +44,93 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
     static final String MATCH_FAILURE
         = "cannot retrieve a parse tree from a failing match";
 
-    private final ParseNodeConstructorProvider provider;
-
-    private final SortedMap<Integer, ParseNodeBuilder> builders = new TreeMap<>();
+    /*
+     * Our stack of parse tree contexts
+     */
+    private final Deque<ParseTreeContext> parseTreeContexts
+        = new ArrayDeque<>();
 
     /*
-     * Check for success at the end of the parsing (that is, the matcher at
-     * level 0 matches successfully).
-     *
-     * On failure, the parse tree is meaningless, so we use that to prevent the
-     * user from returning a nonsensical parse tree (the build method of
-     * ParseNodeBuilder would throw an NPE anyway).
+     * Placeholder for the root node (if the match succeeds, of course)
      */
     private ParseNode rootNode = null;
 
-    /**
-     * Constructor.
-     *
-     * @param provider the parse node constructors provider.
+    /*
+     * Factory to create the parse tree contexts
      */
-    public ParseTreeBuilder(final ParseNodeConstructorProvider provider){
-        this.provider = provider;
+    private final ParseTreeContextFactory factory;
+
+    /**
+     * Constructor
+     *
+     * @param provider the parse node constructors provider
+     */
+    public ParseTreeBuilder(final ParseNodeConstructorProvider provider)
+    {
+        factory = new ParseTreeContextFactory(provider);
     }
 
-	/**
-     * {@inheritDoc}
-     */
     @Override
     public void beforeMatch(final PreMatchEvent<V> event){
         final Context<V> context = event.getContext();
-        final int level = context.getLevel();
-        final Constructor<? extends ParseNode> constructor = findConstructor(context);
-
-        if (constructor == null) {
-            /*
-             * If this is the root rule, a @GenerateNode annotation is required.
-             *
-             * If it was not found, this is an error: yell at the user.
-             */
-            if (level == 0) {
-                throw new IllegalStateException(NO_ANNOTATION_ON_ROOT_RULE);
-            }
-            return;
-        }
-
-        final ParseNodeBuilder builder = new ParseNodeBuilder(constructor);
-
-        builders.put(level, builder);
+        final ParseTreeContext ctx = factory.createContext(context);
+        /*
+         * If we are at the root, the context MUST produce a node. If this is
+         * not the case, this is an error.
+         */
+        if (parseTreeContexts.isEmpty() && !ctx.hasNode())
+            throw new IllegalStateException(NO_ANNOTATION_ON_ROOT_RULE);
+        parseTreeContexts.push(ctx);
     }
 
-	/**
-     * {@inheritDoc}
-     */
     @Override
     public void matchSuccess(final MatchSuccessEvent<V> event){
         final Context<V> context = event.getContext();
-        final int level = context.getLevel();
-        final Constructor<? extends ParseNode> constructor = findConstructor(context);
-
-        if (constructor == null)
-            return;
-
-        final MatchTextSupplier supplier = MatchText.from(context);
-
-        final ParseNodeBuilder builder = builders.remove(level);
-        builder.setMatchTextSupplier(supplier);
 
         /*
-         * If we are back to level 0, we are done. Build the tree.
+         * We have a success: remove the context at the top of the stack and
+         * supply it with the matched text.
          */
-        if (level == 0) {
-            rootNode = builder.build();
+        final ParseTreeContext ctx = parseTreeContexts.pop();
+        final MatchTextSupplier supplier = MatchText.from(context);
+        ctx.setSupplier(supplier);
+
+        /*
+         * If we are back at the root (ie, the stack is empty), we're done:
+         * build the node.
+         */
+        if (parseTreeContexts.isEmpty()) {
+            rootNode = ctx.getNode();
             return;
         }
 
-        final int previousLevel = builders.lastKey();
-
-        builders.get(previousLevel).addChild(builder);
+        /*
+         * If not, take the context at the top of the stack and add this
+         * context as a child context.
+         */
+        parseTreeContexts.peek().addChild(ctx);
     }
 
-
-	/**
-     * {@inheritDoc}
-     */
     @Override
     public void matchFailure(final MatchFailureEvent<V> event) {
         /*
-         * If the match is a failure, remove the builder at this level, if any.
-         *
-         * Failure to do so would mean that successful children would get
-         * attached to an invalid parent and lost at generation time...
+         * If the match is a failure, remove the context at the top of the stack
+         * unconditionally.
          */
-        builders.remove(event.getContext().getLevel());
+        parseTreeContexts.pop();
     }
 
     /**
-     * Get the root {@code ParseNode} of the parse tree built by this {@code ParseTreeBuilder}
+     * Get the root {@code ParseNode} of the parse tree
      *
-     * <p>This recursively builds all children, thus building a parse tree.</p>
-     *
-     * @return      The root node.
-     * @exception IllegalStateException Attempt to retrieve the parse tree from
-     * a failed match.
+     * @return      the root node
+     * @exception IllegalStateException attempt to retrieve the parse tree from
+     * a failed match
      */
     public ParseNode getTree(){
         if (rootNode == null)
             throw new IllegalStateException(MATCH_FAILURE);
         return rootNode;
-    }
-
-    private Constructor<? extends ParseNode> findConstructor(final Context<V> context) {
-        /*
-         * Never attempt to retrieve a constructor if we are in a predicate!
-         */
-        if (context.inPredicate())
-            return null;
-
-        final Matcher matcher = context.getMatcher();
-
-        // FIXME: in theory this should never happen. In theory.
-        if (matcher == null)
-            return null;
-
-        /*
-         * Actions are no good either.
-         *
-         * TODO: this should not happen either; actions are not rules
-         */
-        if (matcher.getType() == MatcherType.ACTION)
-            return null;
-
-        return provider.getNodeConstructor(matcher.getLabel());
     }
 
     private static final class MatchText
