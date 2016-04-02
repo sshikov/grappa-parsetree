@@ -155,19 +155,6 @@ public final class ParseTreeBuilder<V> extends ParseEventListener<V> {
         return rootNode;
     }
 
-	/**
-     * Get the matched {@code String} between the start and current index of the {@code Context}
-     * provided.
-     *
-     * @param context       The context from which to retrieve a match.
-     * @return              The match.
-     */
-    private static String getMatch(final Context<?> context){
-        final int start = context.getStartIndex();
-        final int end = context.getCurrentIndex();
-        return context.getInputBuffer().extract(start, end);
-    }
-
     private Constructor<? extends ParseNode> findConstructor(final Context<V> context) {
         /*
          * Never attempt to retrieve a constructor if we are in a predicate!
