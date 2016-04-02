@@ -34,7 +34,8 @@ import java.util.TreeMap;
  * whether the match is a success (using {@link ParsingResult#isSuccess()})
  * before retrieving the parse tree.</p>
  */
-public final class ParseTreeBuilder2<V> extends ParseEventListener<V> {
+public final class ParseTreeBuilder2<V> extends ParseEventListener<V>
+{
     @VisibleForTesting
     static final String NO_ANNOTATION_ON_ROOT_RULE
         = "root rule has no @GenerateNode annotation";
@@ -42,8 +43,6 @@ public final class ParseTreeBuilder2<V> extends ParseEventListener<V> {
     @VisibleForTesting
     static final String MATCH_FAILURE
         = "cannot retrieve a parse tree from a failing match";
-
-    private final ParseNodeConstructorProvider provider;
 
     private final SortedMap<Integer, ParseTreeContext> parseTreeContexts
         = new TreeMap<>();
@@ -57,14 +56,11 @@ public final class ParseTreeBuilder2<V> extends ParseEventListener<V> {
      *
      * @param provider the parse node constructors provider.
      */
-    public ParseTreeBuilder2(final ParseNodeConstructorProvider provider){
-        this.provider = provider;
+    public ParseTreeBuilder2(final ParseNodeConstructorProvider provider)
+    {
         factory = new ParseTreeContextFactory(provider);
     }
 
-	/**
-     * {@inheritDoc}
-     */
     @Override
     public void beforeMatch(final PreMatchEvent<V> event){
         final Context<V> context = event.getContext();
