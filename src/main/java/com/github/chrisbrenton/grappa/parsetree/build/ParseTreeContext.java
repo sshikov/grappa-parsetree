@@ -10,7 +10,7 @@ interface ParseTreeContext
 {
     void addChild(ParseTreeContext context);
 
-    void setMatch(final MatchTextSupplier supplier);
+    void setMatch(MatchTextSupplier supplier);
 
     default boolean hasNode()
     {
