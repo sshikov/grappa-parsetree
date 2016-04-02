@@ -20,6 +20,7 @@ public final class Issue7Test
             .withRoot(Root.class);
 
         final Root root = tree.parse(INPUT);
+        assertThat(root.getMatchedText()).isEqualTo("ac");
 
         final List<ParseNode> children = root.getChildren();
         ParseNode node;
