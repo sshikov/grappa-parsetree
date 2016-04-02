@@ -34,4 +34,10 @@ public class Issue7Parser
             sequence(a(), c())
         );
     }
+
+    @GenerateNode(Root.class)
+    public Rule joinedInput()
+    {
+        return join(a()).using(b()).min(1);
+    }
 }
