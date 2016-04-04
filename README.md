@@ -2,7 +2,7 @@
 
 The license of this project is Apache 2.0.
 
-The latest version of grappa-parsetree is 1.0.1, although 1.1.0-beta.2 is also available. It requires Java 8 or later.
+The latest version of grappa-parsetree is 1.0.1, although 1.1.0-beta.3 is also available. It requires Java 8 or later.
 
 ## What Is This?
 
