@@ -5,10 +5,12 @@ import com.github.chrisbrenton.grappa.parsetree.node.MatchTextSupplier;
 import com.github.chrisbrenton.grappa.parsetree.node.ParseNode;
 import com.github.fge.grappa.run.events.PreMatchEvent;
 import com.github.fge.grappa.support.Position;
+import com.google.common.collect.ComparisonChain;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +21,12 @@ import java.util.Objects;
  */
 final class ParseTreeContext
 {
+    private static final Comparator<Position> CMP
+        = (o1, o2) -> ComparisonChain.start()
+            .compare(o1.getLine(), o2.getLine())
+            .compare(o1.getColumn(), o2.getColumn())
+            .result();
+
     /**
      * The parse node builder, if any (null if none)
      */
@@ -98,17 +106,16 @@ final class ParseTreeContext
 
         for (final ParseTreeContext child: children) {
             pos  = child.supplier.getEndPosition();
-            ret.addAll(child.getBuilders());
             /*
-             * HACK...
+             * We may have more nodes built than what the end of the input text
+             * says: see join().
              *
-             * This is there only to take care of a join() rule which would have
-             * matched an extra joining rule but not a joined rule; the matcher
-             * itself will have correctly assessed the situation, but here we
-             * need to do the work again...
+             * For this reason we break out of the loop if the end position of
+             * the child is greater than ours.
              */
-            if (pos.equals(end))
+            if (CMP.compare(pos, end) > 0)
                 break;
+            ret.addAll(child.getBuilders());
         }
 
         /*

@@ -46,4 +46,16 @@ public class Issue7Parser
     {
         return sequence(joinedInput(), b());
     }
+
+    @GenerateNode(EmptyNode.class)
+    public Rule empty()
+    {
+        return EMPTY;
+    }
+
+    @GenerateNode(Root.class)
+    public Rule emptyInput()
+    {
+        return sequence(empty(), empty());
+    }
 }

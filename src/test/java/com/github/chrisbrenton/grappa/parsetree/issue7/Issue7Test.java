@@ -72,4 +72,27 @@ public final class Issue7Test
         assertThat(node).isExactlyInstanceOf(AfterA.class);
         assertThat(node.getMatchedText()).isEqualTo("b");
     }
+
+    @Test
+    public void emptyNodesAreAllIncluded()
+    {
+        final ParseTree<Root> tree = ParseTree.usingParser(Issue7Parser.class)
+            .withRule(Issue7Parser::emptyInput)
+            .withRoot(Root.class);
+
+        final Root root = tree.parse("");
+
+        final List<ParseNode> children = root.getChildren();
+        ParseNode node;
+
+        assertThat(children).hasSize(2);
+
+        node = children.get(0);
+        assertThat(node).isExactlyInstanceOf(EmptyNode.class);
+        assertThat(node.getMatchedText()).isEqualTo("");
+
+        node = children.get(1);
+        assertThat(node).isExactlyInstanceOf(EmptyNode.class);
+        assertThat(node.getMatchedText()).isEqualTo("");
+    }
 }
