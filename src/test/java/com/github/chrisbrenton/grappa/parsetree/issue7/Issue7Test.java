@@ -38,15 +38,21 @@ public final class Issue7Test
     public void extraJoiningNodesAreDiscarded()
     {
         final ParseTree<Root> tree = ParseTree.usingParser(Issue7Parser.class)
-            .withRule(Issue7Parser::joinedInput)
+            .withRule(Issue7Parser::input2)
             .withRoot(Root.class);
 
         final Root root = tree.parse("abab");
-        assertThat(root.getMatchedText()).isEqualTo("aba");
 
-        final List<ParseNode> children = root.getChildren();
+        List<ParseNode> children;
         ParseNode node;
 
+        children = root.getChildren();
+        assertThat(children).hasSize(2);
+
+        node = children.get(0);
+        assertThat(node).isExactlyInstanceOf(Root.class);
+
+        children = node.getChildren();
         assertThat(children).hasSize(3);
 
         node = children.get(0);
@@ -60,5 +66,10 @@ public final class Issue7Test
         node = children.get(2);
         assertThat(node).isExactlyInstanceOf(ANode.class);
         assertThat(node.getMatchedText()).isEqualTo("a");
+
+        children = root.getChildren();
+        node = children.get(1);
+        assertThat(node).isExactlyInstanceOf(AfterA.class);
+        assertThat(node.getMatchedText()).isEqualTo("b");
     }
 }
